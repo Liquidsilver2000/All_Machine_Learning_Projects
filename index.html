@@ -1,0 +1,2174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Constellations of Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --coi-bg-primary: #070B14;
+            --coi-bg-secondary: #0F172A;
+            --coi-accent: #2EE9F6;
+            --coi-text-primary: #F4F7FF;
+            --coi-text-secondary: #A9B3C8;
+            --coi-glass-bg: rgba(15, 23, 42, 0.75);
+            --coi-glass-border: rgba(46, 233, 246, 0.35);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--coi-bg-primary);
+            color: var(--coi-text-primary);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -0.02em;
+            line-height: 1.05;
+        }
+
+        .font-mono {
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        /* Glass Panel */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.55);
+            border: 1px solid rgba(46, 233, 246, 0.35);
+            border-radius: 22px;
+            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(14px) saturate(115%);
+            -webkit-backdrop-filter: blur(14px) saturate(115%);
+        }
+
+        /* Glass Button */
+        .glass-button {
+            background: rgba(46, 233, 246, 0.1);
+            border: 1px solid rgba(46, 233, 246, 0.4);
+            border-radius: 12px;
+            color: var(--coi-accent);
+            padding: 14px 28px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .glass-button:hover {
+            background: rgba(46, 233, 246, 0.2);
+            border-color: rgba(46, 233, 246, 0.7);
+            box-shadow: 0 0 25px rgba(46, 233, 246, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* HUD Label */
+        .hud-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--coi-accent);
+        }
+
+        /* Tag Pill */
+        .tag-pill {
+            background: rgba(46, 233, 246, 0.08);
+            border: 1px solid rgba(46, 233, 246, 0.25);
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--coi-text-secondary);
+        }
+
+        /* Noise Overlay */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.04;
+            mix-blend-mode: overlay;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Vignette */
+        .vignette {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, transparent 0%, transparent 50%, rgba(7, 11, 20, 0.6) 100%);
+            pointer-events: none;
+        }
+
+        /* Float Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .float-animation {
+            animation: float 2.8s ease-in-out infinite;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--coi-bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(46, 233, 246, 0.3);
+            border-radius: 3px;
+        }
+
+        /* Modal Scrollbar */
+        .case-modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .case-modal-content::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 4px;
+        }
+
+        .case-modal-content::-webkit-scrollbar-thumb {
+            background: rgba(46, 233, 246, 0.4);
+            border-radius: 4px;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            padding: 24px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(to bottom, var(--coi-bg-primary), transparent);
+            pointer-events: none;
+        }
+
+        .nav > * {
+            pointer-events: auto;
+        }
+
+        .nav-logo {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--coi-accent);
+            letter-spacing: 0.1em;
+        }
+
+        .nav-dots {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(46, 233, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: var(--coi-accent);
+            width: 16px;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .starfield {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 900px;
+            padding: 0 24px;
+        }
+
+        .hero-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--coi-accent);
+            margin-bottom: 24px;
+        }
+
+        .hero-title {
+            font-size: clamp(48px, 10vw, 96px);
+            font-weight: 700;
+            line-height: 0.95;
+            margin-bottom: 32px;
+            background: linear-gradient(135deg, var(--coi-text-primary) 0%, var(--coi-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(16px, 2.5vw, 20px);
+            color: var(--coi-text-secondary);
+            line-height: 1.6;
+            margin-bottom: 48px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: var(--coi-text-secondary);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* Project Section */
+        .project {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 80px 0;
+        }
+
+        .project-container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 48px;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items: center;
+        }
+
+        .project-graph {
+            position: relative;
+        }
+
+        .project-graph-container {
+            aspect-ratio: 4/3;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-graph-header {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            z-index: 10;
+        }
+
+        .project-graph-layout {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10px;
+            color: var(--coi-text-secondary);
+            opacity: 0.6;
+        }
+
+        .project-graph-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .project-info {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .project-subtitle {
+            margin-bottom: 4px;
+        }
+
+        .project-title {
+            font-size: clamp(28px, 4vw, 42px);
+            font-weight: 600;
+            line-height: 1.1;
+            margin-bottom: 8px;
+        }
+
+        .project-description {
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--coi-text-secondary);
+            max-width: 500px;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 8px 0;
+        }
+
+        /* Animation Classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .slide-in-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Case Study Modal */
+        .case-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(7, 11, 20, 0.85);
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .case-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .case-modal-content {
+            width: 100%;
+            max-width: 900px;
+            max-height: 90vh;
+            background: var(--coi-glass-bg);
+            border: 1px solid var(--coi-glass-border);
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
+            overflow: hidden;
+            transform: scale(0.95) translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .case-modal.active .case-modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .case-modal-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            padding: 32px 32px 0;
+            border-bottom: 1px solid rgba(46, 233, 246, 0.15);
+        }
+
+        .case-modal-title-section {
+            flex: 1;
+            padding-bottom: 24px;
+        }
+
+        .case-modal-subtitle {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--coi-accent);
+            margin-bottom: 8px;
+        }
+
+        .case-modal-title {
+            font-size: 28px;
+            font-weight: 600;
+            line-height: 1.2;
+            color: var(--coi-text-primary);
+        }
+
+        .case-modal-close {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(46, 233, 246, 0.1);
+            border: 1px solid rgba(46, 233, 246, 0.3);
+            color: var(--coi-accent);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            margin-left: 16px;
+        }
+
+        .case-modal-close:hover {
+            background: rgba(46, 233, 246, 0.2);
+            border-color: rgba(46, 233, 246, 0.6);
+            transform: rotate(90deg);
+        }
+
+        .case-modal-body {
+            padding: 32px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .case-section {
+            margin-bottom: 32px;
+        }
+
+        .case-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .case-section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--coi-accent);
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(46, 233, 246, 0.2);
+        }
+
+        .case-section-content {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--coi-text-secondary);
+        }
+
+        .case-section-content p {
+            margin-bottom: 16px;
+        }
+
+        .case-section-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .case-metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .case-metric {
+            background: rgba(46, 233, 246, 0.05);
+            border: 1px solid rgba(46, 233, 246, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .case-metric-value {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--coi-accent);
+            margin-bottom: 4px;
+        }
+
+        .case-metric-label {
+            font-size: 12px;
+            color: var(--coi-text-secondary);
+        }
+
+        .case-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .project-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .project-graph {
+                order: -1;
+            }
+
+            .project-container {
+                padding: 0 24px;
+            }
+
+            .nav {
+                padding: 16px 24px;
+            }
+
+            .case-modal {
+                padding: 16px;
+            }
+
+            .case-modal-content {
+                max-height: 95vh;
+            }
+
+            .case-modal-header {
+                padding: 24px 24px 0;
+            }
+
+            .case-modal-body {
+                padding: 24px;
+            }
+
+            .case-modal-title {
+                font-size: 22px;
+            }
+
+            .case-metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .project-title {
+                font-size: 24px;
+            }
+
+            .case-modal-header {
+                padding: 20px 20px 0;
+            }
+
+            .case-modal-body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Noise Overlay -->
+    <div class="noise-overlay"></div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-logo">COI</div>
+        <div class="nav-dots">
+            <div class="nav-dot active"></div>
+            <div class="nav-dot"></div>
+            <div class="nav-dot"></div>
+            <div class="nav-dot"></div>
+            <div class="nav-dot"></div>
+            <div class="nav-dot"></div>
+            <div class="nav-dot"></div>
+            <div class="nav-dot"></div>
+            <div class="nav-dot"></div>
+            <div class="nav-dot"></div>
+            <div class="nav-dot"></div>
+            <div class="nav-dot"></div>
+            <div class="nav-dot"></div>
+            <div class="nav-dot"></div>
+            <div class="nav-dot"></div>
+            <div class="nav-dot"></div>
+            <div class="nav-dot"></div>
+            <div class="nav-dot"></div>
+            <div class="nav-dot"></div>
+            <div class="nav-dot"></div>
+            <div class="nav-dot"></div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <canvas class="starfield" id="starfield"></canvas>
+        <div class="vignette"></div>
+        <div class="hero-content">
+            <div class="hero-label">Data Science Portfolio</div>
+            <h1 class="hero-title">Constellations<br>of Intelligence</h1>
+            <p class="hero-subtitle">Twenty end-to-end machine learning systems—architected, trained, and deployed at production scale.</p>
+            <button class="glass-button hero-cta" onclick="scrollToProjects()">
+                Explore Projects
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 17L17 7"></path>
+                    <path d="M7 7h10v10"></path>
+                </svg>
+            </button>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M19 12l-7 7-7-7"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Projects Container -->
+    <div id="projects-container"></div>
+
+    <!-- Case Study Modal -->
+    <div class="case-modal" id="caseModal">
+        <div class="case-modal-content">
+            <div class="case-modal-header">
+                <div class="case-modal-title-section">
+                    <div class="case-modal-subtitle" id="modalSubtitle"></div>
+                    <h2 class="case-modal-title" id="modalTitle"></h2>
+                </div>
+                <button class="case-modal-close" onclick="closeCaseModal()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="case-modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // Case Studies Data
+        const caseStudies = {
+            1: {
+                subtitle: 'Machine Learning',
+                title: 'Credit Risk Scoring Engine',
+                executiveSummary: `This project delivered a production-grade credit risk assessment platform for a regional banking consortium serving 2.3 million retail customers. The legacy system relied on rudimentary scorecards with limited predictive power, resulting in suboptimal lending decisions and elevated default rates.
+
+The solution implements a sophisticated machine learning pipeline that combines traditional credit scoring methodologies with modern interpretability techniques. By leveraging Weight of Evidence (WOE) binning and Information Value (IV) analysis, we transformed raw credit bureau data into predictive features while maintaining full regulatory transparency. The final ensemble model achieves superior discrimination power while providing clear explanations for every lending decision.`,
+                businessProblem: `The banking consortium faced mounting pressure from regulators to improve credit risk assessment accuracy while maintaining explainability. Default rates had increased 23% over three years, eroding portfolio profitability. The existing scorecard system, built in 2012, failed to capture complex non-linear relationships in customer behavior data.
+
+Key challenges included: regulatory compliance requiring explainable decisions, integration with legacy core banking systems, handling missing data for thin-file customers, and reducing time-to-decision from 48 hours to under 5 minutes. The solution needed to process 15,000+ applications daily with 99.9% uptime.`,
+                technicalArchitecture: `The architecture follows a microservices pattern deployed on Kubernetes. Data ingestion layer uses Apache Kafka for real-time application streaming. Feature engineering pipeline implements WOE binning with automatic optimal binning algorithms. The model layer combines logistic regression (for regulatory compliance) with gradient boosting (for accuracy) in a stacked ensemble.
+
+Model serving uses TensorFlow Serving with custom WOE transformation layers. Explanation generation leverages SHAP values computed in real-time. The API layer exposes REST endpoints with sub-200ms latency. All components are containerized with Helm charts for reproducible deployments across dev, staging, and production environments.`,
+                dataStrategy: `Data sources include credit bureau reports (Equifax, Experian), internal transaction history, alternative data (utility payments, rental history), and macroeconomic indicators. The feature store contains 847 engineered features across demographic, behavioral, and credit history dimensions.
+
+WOE binning transforms continuous variables into risk-ranked categories, handling outliers naturally and creating monotonic relationships with default probability. IV analysis selects the most predictive features while eliminating redundant variables. Special handling for thin-file customers uses alternative data proxies and transfer learning from similar customer segments.`,
+                modelPerformance: `The final model achieves a Gini coefficient of 0.78 (vs. 0.62 legacy), representing a 26% improvement in discrimination power. KS statistic of 0.52 indicates excellent separation between good and bad borrowers. At the optimal cutoff, the model captures 82% of defaults while approving 71% of good customers.
+
+SHAP analysis reveals the top predictive features: credit utilization ratio (18% importance), payment history recency (15%), debt-to-income ratio (12%), and employment stability (9%). Model calibration is excellent with Brier score of 0.082. Stress testing shows robust performance across economic cycles with Gini remaining above 0.70 during recession simulations.`,
+                implementationStrategy: `Deployment followed a phased rollout over 6 months. Phase 1 (months 1-2) involved shadow mode testing where model predictions were logged but not used for decisions. Phase 2 (months 3-4) implemented champion-challenger testing with 10% traffic diverted to the new model. Phase 3 (months 5-6) completed full migration with legacy system decommissioning.
+
+Change management included training 340 loan officers on interpreting SHAP explanations and updating 27 policy documents. Monitoring dashboards track model drift, data quality, and business KPIs. Automated retraining triggers when PSI exceeds 0.25 or when AUC drops by more than 0.03 from baseline.`,
+                businessImpact: `The new scoring engine reduced default rates by 31% in the first year, translating to $47 million in avoided losses. Approval automation increased from 34% to 68% of applications, reducing operational costs by $2.3 million annually. Customer satisfaction improved with average decision time dropping from 48 hours to 4.2 minutes.
+
+The bank expanded its addressable market by 18% through improved thin-file assessment, generating an estimated $89 million in additional loan volume. Regulatory examinations praised the explainability framework, resulting in zero findings related to model risk management.`,
+                lessonsLearned: `The importance of early stakeholder engagement became evident when loan officers initially resisted the new system. Involving them in SHAP explanation design during development built trust and accelerated adoption. Alternative data sources provided significant lift for thin-file customers but required extensive data quality validation.
+
+The WOE binning approach, while powerful, needed careful monitoring as economic conditions shift. We implemented automatic bin boundary adjustment triggers to maintain model stability. Documentation rigor proved essential—regulators scrutinized every design decision, making comprehensive model cards invaluable.`
+            },
+            2: {
+                subtitle: 'Survival Analysis',
+                title: 'Customer Churn Forecaster',
+                executiveSummary: `A telecommunications provider serving 8 million subscribers faced escalating churn rates in an increasingly competitive market. This project delivered a comprehensive customer retention system that predicts not just whether a customer will leave, but precisely when—enabling proactive intervention at the optimal moment.
+
+The solution combines survival analysis techniques with gradient boosting to model customer lifetime dynamics. Unlike binary classification approaches, survival analysis handles censored data naturally and provides time-varying risk estimates. The system integrates with marketing automation to trigger personalized retention offers based on individual churn probability trajectories.`,
+                businessProblem: `Churn had reached 3.2% monthly, costing the company $127 million annually in lost revenue and acquisition costs to replace departing customers. The existing rule-based retention system flagged customers only after they initiated port-out requests—far too late for effective intervention.
+
+The challenge was predicting churn early enough for retention campaigns to be effective while avoiding offer fatigue from excessive outreach. Different customer segments exhibited vastly different churn patterns: postpaid contract customers showed gradual risk accumulation while prepaid users often churned abruptly. A one-size-fignal approach would not suffice.`,
+                technicalArchitecture: `The system architecture combines batch and real-time components. Daily batch jobs train survival models on historical data using the Lifelines library for Cox Proportional Hazards and custom implementations for gradient-boosted survival trees. Real-time scoring uses a feature store updated from streaming event data.
+
+The prediction service exposes both probability-at-time and expected-lifetime endpoints. Marketing integration uses a decision engine that evaluates churn probability against offer economics to determine optimal intervention timing and channel. A/B testing framework continuously evaluates retention offer effectiveness.`,
+                dataStrategy: `Features span 847 variables across usage patterns (call duration, data consumption, roaming behavior), billing history (late payments, plan changes, overage charges), customer service interactions (complaint frequency, resolution time), and network experience (dropped calls, data speed tests).
+
+SMOTE addresses class imbalance in the training data, creating synthetic churners to balance the dataset. Time-aware feature engineering captures trends like declining usage intensity and increasing support contacts. Seasonal patterns are encoded through Fourier features capturing monthly and quarterly cycles.`,
+                modelPerformance: `The Cox Proportional Hazards model achieves a concordance index of 0.78, indicating strong predictive discrimination. Time-dependent AUC ranges from 0.82 at 30 days to 0.74 at 180 days, showing excellent near-term accuracy with graceful degradation. The gradient-boosted variant improves 90-day predictions to AUC 0.85.
+
+Calibration analysis shows well-calibrated probabilities across deciles, enabling reliable expected value calculations for retention offers. Feature importance reveals tenure (22%), recent usage decline (18%), and complaint frequency (14%) as top predictors. Model explanations identify distinct churn archetypes: price-sensitive, service-dissatisfied, and competitor-attracted.`,
+                implementationStrategy: `Deployment used a champion-challenger approach over 4 months. The survival model ran in parallel with the legacy rule-based system, with predictions logged but not acted upon initially. After validation, 20% of at-risk customers received model-driven interventions while the remainder continued with legacy treatments.
+
+Successful interventions were scaled gradually, reaching 100% model-driven retention by month 4. Marketing teams received training on interpreting survival curves and hazard ratios. Automated monitoring tracks prediction accuracy, intervention response rates, and overall retention lift.`,
+                businessImpact: `The churn prediction system reduced monthly churn from 3.2% to 2.4% within 6 months—a 25% improvement representing $31.8 million in annual retained revenue. Retention campaign ROI improved 3.4x through better targeting and timing. Offer redemption rates increased from 12% to 34%.
+
+Customer lifetime value increased by $87 per subscriber on average. The marketing team reduced outreach volume by 40% while improving effectiveness, reducing customer annoyance and contact center load. Net Promoter Score improved 8 points as retention offers became more relevant and timely.`,
+                lessonsLearned: `Survival analysis proved superior to binary classification for this use case, providing richer information for decision-making. However, explaining hazard ratios to business stakeholders required significant investment in visualization and training. The time-varying nature of churn risk meant static risk scores became stale quickly—real-time feature updates were essential.
+
+We learned that not all predicted churners should receive retention offers. Some customers are unprofitable or unlikely to respond, and the decision engine must incorporate business economics alongside churn probability. The integration with marketing systems was more complex than anticipated, requiring substantial API development and testing.`
+            },
+            3: {
+                subtitle: 'Location Intelligence',
+                title: 'Geospatial Site Selector',
+                executiveSummary: `A national retail chain with 1,200 locations sought to optimize its expansion strategy through data-driven site selection. This project delivered an intelligent location analytics platform that identifies high-potential sites by modeling the complex interplay between demographics, competition, accessibility, and local market dynamics.
+
+The solution combines geospatial clustering, gravity models, and mathematical optimization to evaluate millions of potential site combinations. By analyzing population flow patterns and competitive density, the system predicts revenue potential with remarkable accuracy—enabling confident real estate investment decisions worth tens of millions of dollars.`,
+                businessProblem: `The retailer's traditional site selection relied on intuition and basic demographic analysis, resulting in inconsistent performance across new locations. 23% of stores opened in the past 5 years underperformed projections by more than 30%, representing significant capital misallocation.
+
+The challenge was evaluating trade areas holistically—understanding not just who lives nearby, but who actually shops in the area, how they travel, and which competitors capture their spending. Cannibalization of existing locations was a major concern, as was identifying emerging markets before competitors. Each site evaluation needed to complete within 48 hours to compete for prime real estate.`,
+                technicalArchitecture: `The platform uses a cloud-native architecture with PostgreSQL/PostGIS for geospatial data storage and analysis. The clustering engine implements K-Means and DBSCAN algorithms for trade area segmentation. Huff Model calculations estimate market share based on attractiveness and distance decay functions.
+
+Optimization uses mixed-integer linear programming solved with Google OR-Tools, maximizing total expected revenue subject to constraints on minimum distance between locations, market coverage targets, and capital budget limits. Interactive maps use Mapbox GL JS with custom data layers for visualization.`,
+                dataStrategy: `Data sources include US Census Bureau demographic data (income, age, household composition), mobile location data capturing 95 million device trajectories monthly, credit card transaction panels showing spending patterns, and proprietary store performance data. Uber H3 hexagonal indexing enables efficient spatial aggregation and analysis.
+
+Gravity models calculate the probability of consumers patronizing each store based on store attractiveness (size, format, brand strength) and travel distance. Competitive intensity is modeled through spatial kernel density estimation. Cannibalization effects are quantified through customer overlap analysis using mobile location patterns.`,
+                modelPerformance: `The revenue prediction model achieves R² of 0.84 on held-out test locations, with mean absolute percentage error of 12.3%. Model predictions correctly ranked actual performance for 78% of validation sites. Trade area delineation matches ground-truth customer origin data with 89% accuracy.
+
+Clustering identifies 7 distinct trade area archetypes, each with characteristic demographic profiles and optimal store formats. Huff Model market share estimates correlate 0.82 with actual market share where ground truth is available. Optimization runs complete in under 4 hours for 500-site expansion scenarios.`,
+                implementationStrategy: `The platform was developed over 8 months in close collaboration with the real estate team. Initial model development used 5 years of historical site performance data. Validation involved backtesting on 50 recent locations withheld from training. User acceptance testing refined map visualizations and report formats.
+
+Rollout included training for 35 real estate analysts and integration with the company's property management system. A governance framework ensures model updates are validated before deployment. Quarterly refresh of demographic and competitive data maintains prediction accuracy.`,
+                businessImpact: `Sites selected using the platform outperformed traditionally-selected locations by 24% in first-year revenue. The company avoided $18 million in potential losses by identifying and rejecting poor-performing sites early in the evaluation process. Time-to-decision decreased from 3 weeks to 2 days, improving competitive position for prime locations.
+
+The optimization engine identified a portfolio rebalancing opportunity that would increase total network revenue by 8% through strategic relocations and format changes. Market share in priority segments increased 4.2 percentage points through better-targeted expansion.`,
+                lessonsLearned: `Mobile location data proved transformative for understanding actual shopping patterns, but required careful privacy-compliant handling and significant data engineering effort. The Huff Model, while elegant, needed extensive calibration for different retail formats and market types.
+
+We discovered that local market knowledge from real estate teams provided valuable signals not captured in quantitative data. The final solution combines model predictions with structured expert input through a weighted scoring framework. Regular model retraining is essential as market dynamics shift—annual refresh is now standard practice.`
+            },
+            4: {
+                subtitle: 'Collaborative Filtering',
+                title: 'Product Recommendation Engine',
+                executiveSummary: `An e-commerce marketplace with 4 million active users and 850,000 products sought to transform its recommendation capabilities. This project delivered a sophisticated collaborative filtering system that connects users with relevant products, dramatically improving engagement metrics and driving substantial revenue growth.
+
+The solution implements matrix factorization with neural network enhancements, solving the cold-start problem through content-based hybridization. Real-time personalization adapts recommendations based on session behavior, while batch models capture long-term preference patterns. The system handles the extreme sparsity inherent in large-scale recommendation problems.`,
+                businessProblem: `The marketplace's existing recommendation system used simple popularity-based and category-matching approaches, resulting in generic suggestions that failed to capture individual preferences. Click-through rate on recommendations was just 2.1%, and only 8% of purchases included a recommended item.
+
+The cold-start problem was acute—new users received no personalization for their first several sessions, and new products languished without visibility. The long-tail challenge meant 73% of products never appeared in recommendations, limiting discovery and seller satisfaction. The solution needed to serve personalized recommendations within 100ms at scale.`,
+                technicalArchitecture: `The architecture separates batch model training from real-time serving. Daily Spark jobs train matrix factorization models using Alternating Least Squares (ALS) on implicit feedback data. Neural collaborative filtering models are trained weekly on explicit ratings. Model artifacts are stored in S3 and loaded into TensorFlow Serving.
+
+Real-time personalization uses a two-tower neural network architecture with user and item embeddings. Candidate generation retrieves 500 potential items using approximate nearest neighbors (ANN) with FAISS. Ranking reorders candidates using a gradient-boosted model incorporating session context. The serving layer achieves p99 latency of 78ms.`,
+                dataStrategy: `Implicit feedback includes product views, cart additions, purchases, wishlist additions, and dwell time. Explicit feedback captures ratings and reviews. User features span demographics, purchase history, and browsing patterns. Item features include categories, attributes, price, seller reputation, and image embeddings from a pre-trained CNN.
+
+Matrix factorization learns 128-dimensional latent factors for users and items. Cold-start users receive recommendations based on demographic similarity to established users. New items are represented by content embeddings until sufficient interaction data accumulates. Negative sampling during training addresses the implicit feedback challenge.`,
+                modelPerformance: `The matrix factorization model achieves normalized discounted cumulative gain (NDCG@10) of 0.34, a 67% improvement over the legacy system. Click-through rate on recommendations increased to 6.8%, and 23% of purchases now include a recommended item. Coverage improved dramatically—94% of products now receive recommendation exposure.
+
+Cold-start performance shows new users achieve 72% of established user CTR within their first session through demographic-based initialization. The neural collaborative filtering model improves explicit rating prediction to RMSE 0.82. A/B testing confirms 18% revenue lift from the full recommendation stack.`,
+                implementationStrategy: `Deployment followed a careful rollout to manage infrastructure risk. Initial shadow testing validated serving capacity without user impact. Gradual traffic shifting from 1% to 100% over 6 weeks allowed monitoring for performance degradation. Fallback to legacy system was maintained throughout rollout.
+
+Integration with the existing e-commerce platform required developing REST APIs and caching layers. Redis clusters cache user embeddings and popular recommendations, reducing database load. Monitoring tracks recommendation diversity, coverage, and business metrics in real-time.`,
+                businessImpact: `Recommendation-driven revenue increased 340% year-over-year, contributing $47 million in incremental GMV. Average order value increased 14% through effective cross-sell recommendations. Customer engagement improved with session duration increasing 23% and pages per session up 31%.
+
+Seller satisfaction improved as long-tail products gained visibility—the bottom 50% of products by sales saw a 78% increase in impressions. The marketplace differentiated from competitors through superior discovery experience, contributing to 12% improvement in customer retention.`,
+                lessonsLearned: `Matrix factorization provided an excellent baseline, but neural approaches delivered meaningful improvements for explicit feedback scenarios. The cold-start problem required multiple strategies—demographic similarity for users, content embeddings for items, and popularity-based fallbacks for complete newcomers.
+
+We learned that recommendation diversity matters as much as accuracy—overly narrow recommendations create filter bubbles and limit discovery. The final system optimizes for a diversity-accuracy tradeoff. Real-time session signals proved surprisingly powerful, with recent views having 3x more influence than historical purchases.`
+            },
+            5: {
+                subtitle: 'Natural Language Processing',
+                title: 'Sentiment Analysis Pipeline',
+                executiveSummary: `A consumer electronics company needed to understand customer sentiment across millions of product reviews, support tickets, and social media mentions. This project built an enterprise NLP pipeline that extracts actionable insights from unstructured text at scale, enabling data-driven product improvement and customer service optimization.
+
+The solution implements a transformer-based sentiment analysis system with aspect-based extraction, identifying not just whether sentiment is positive or negative, but precisely which product features drive those sentiments. Multi-language support covers 12 languages representing 94% of customer feedback volume.`,
+                businessProblem: `The company received over 2 million text feedback items annually across channels, but lacked systematic analysis capabilities. Product teams made decisions without understanding customer pain points. Support prioritization was arbitrary, and emerging issues were detected too late for proactive response.
+
+The challenge was handling the diversity of text sources—formal reviews, informal social posts, technical support tickets, and survey responses each required different processing approaches. Sarcasm, negation, and domain-specific terminology complicated sentiment classification. The solution needed to process 50,000 items per hour with 95%+ accuracy.`,
+                technicalArchitecture: `The pipeline uses Apache Airflow for orchestration with separate DAGs for data ingestion, preprocessing, inference, and aggregation. Preprocessing includes language detection, tokenization, and normalization. The inference layer uses fine-tuned BERT models deployed on GPU-enabled Kubernetes clusters.
+
+Aspect extraction uses spaCy for named entity recognition combined with custom rules for product-specific features. Sentiment classification employs DistilBERT for efficiency, with larger RoBERTa models for disputed cases. Results are stored in Elasticsearch for real-time dashboarding and alerting.`,
+                dataStrategy: `Training data combines publicly available sentiment datasets with 50,000 company-specific labeled examples. Active learning continuously expands the labeled dataset by selecting uncertain predictions for human review. Data augmentation through back-translation improves robustness across language variants.
+
+Aspect categories include battery life, performance, design, usability, durability, and customer service. Each aspect has associated sentiment (positive/negative/neutral) and intensity scores. Entity linking connects mentions to specific product SKUs and versions for trend analysis.`,
+                modelPerformance: `The sentiment classifier achieves 94.2% accuracy on the test set, with F1-score of 0.93 for positive and 0.91 for negative sentiments. Aspect extraction precision is 87% with recall of 82%. Multi-language performance varies by language, with 96% accuracy for English and 89% for the most challenging language (Japanese).
+
+Error analysis reveals most misclassifications involve sarcasm (12% of errors), implicit sentiment (18%), and ambiguous context (23%). The active learning approach improved accuracy by 4.3 percentage points over 6 months. Inference throughput reaches 65,000 items per hour per GPU.`,
+                implementationStrategy: `Deployment used a phased approach starting with English-only support for reviews only. Phase 2 added social media and support tickets. Phase 3 expanded to full multi-language support. Each phase included extensive validation against human-labeled ground truth.
+
+Integration with existing systems required developing connectors for review platforms, social media APIs, and support ticketing systems. Dashboards were built in Tableau for business users, with raw data accessible through SQL interfaces for analysts. Alerting rules notify product teams of sentiment anomalies.`,
+                businessImpact: `The sentiment pipeline identified a battery issue affecting 4% of a flagship product within 48 hours of first customer mentions, enabling a rapid firmware fix that prevented a recall. Product teams now receive weekly sentiment reports informing roadmap priorities—features with negative sentiment are 3.2x more likely to be redesigned.
+
+Support ticket prioritization using sentiment scores reduced average resolution time by 28% for high-urgency issues. Marketing leveraged positive sentiment quotes in campaigns, improving click-through rates by 19%. Overall customer satisfaction improved 11 points as the company became more responsive to feedback.`,
+                lessonsLearned: `Domain adaptation proved critical—off-the-shelf sentiment models achieved only 76% accuracy on product-specific text. Fine-tuning on even 5,000 labeled examples improved accuracy to 91%. Active learning was essential for efficient labeling, with uncertainty sampling reducing required labels by 60%.
+
+We learned that aspect extraction requires continuous maintenance as product lines evolve. A governance process now updates aspect categories quarterly. Multi-language support was more challenging than anticipated, requiring language-specific preprocessing and evaluation. The pipeline's value increased over time as historical data enabled trend analysis.`
+            }
+        };
+
+        // Continue Case Studies Data
+        caseStudies[6] = {
+            subtitle: 'Computer Vision',
+            title: 'Visual Quality Inspector',
+            executiveSummary: `A precision manufacturing facility producing automotive components needed to improve quality control while increasing production throughput. This project delivered a computer vision system that automatically detects defects with superhuman accuracy, operating at line speed to inspect 100% of production.
+
+The solution implements deep learning-based defect detection using convolutional neural networks trained on millions of annotated images. The system handles multiple defect types including surface scratches, dimensional variations, contamination, and assembly errors. Real-time processing at 60 FPS ensures no production slowdown while maintaining inspection rigor.`,
+            businessProblem: `Manual inspection was the production bottleneck, limiting throughput to 400 units per hour while requiring 12 inspectors across three shifts. Human inspectors achieved 94% defect detection rate but suffered from fatigue-related degradation and inconsistency between operators. Escape defects reached customers at a rate of 23 PPM (parts per million), damaging brand reputation.
+
+The challenge was detecting subtle defects on reflective metal surfaces with varying lighting conditions. Defect examples were rare for some categories—certain critical defects occurred in only 0.01% of units, making training data scarce. The solution needed to integrate with existing PLCs and reject mechanisms without production downtime.`,
+            technicalArchitecture: `The system uses industrial cameras with high-frequency LED strobing for consistent illumination. Images are preprocessed with custom pipelines including distortion correction, normalization, and multi-scale pyramids. The detection network uses a YOLOv8 architecture optimized for small defect detection with a custom anchor box configuration.
+
+Inference runs on NVIDIA Jetson AGX Xavier edge devices with TensorRT optimization. Results are communicated to the PLC through Modbus TCP for reject actuator control. A central server aggregates inspection data for quality analytics and model retraining. The architecture achieves 12ms inference latency per image.`,
+            dataStrategy: `Training data combines production images with synthetic defects generated through GANs and traditional image augmentation. 2.3 million images were collected over 6 months, with 180,000 containing annotated defects across 14 categories. Active learning prioritizes uncertain predictions for expert review, continuously expanding the labeled dataset.
+
+Data augmentation includes rotation, scaling, brightness variation, and synthetic defect overlay. Transfer learning from ImageNet provides initial feature representations, with fine-tuning on the defect dataset. Hard negative mining focuses training on challenging examples that generate false positives.`,
+            modelPerformance: `The defect detection model achieves 99.2% accuracy with 98.7% precision and 99.5% recall across all defect categories. Per-category performance varies: surface scratches (99.1% F1), dimensional errors (98.4% F1), contamination (99.7% F1), and assembly defects (97.8% F1). False positive rate is 0.3%, minimizing unnecessary rejects.
+
+Inference speed of 60 FPS matches production line rate with 2-frame buffer. The system maintains performance across lighting variations through automatic exposure adjustment and normalization. Robustness testing confirms 98.5% accuracy under worst-case conditions (dust, vibration, temperature extremes).`,
+            implementationStrategy: `Deployment followed extensive validation in parallel with manual inspection. Initial shadow mode ran for 8 weeks with predictions logged but not acted upon. Gradual rollout replaced manual inspection station by station over 12 weeks, with operators transitioning to monitoring roles.
+
+Integration with manufacturing execution systems (MES) enables automatic quality reporting and traceability. Calibration procedures ensure camera alignment and lighting consistency. Regular model updates deploy through a CI/CD pipeline with A/B testing against previous versions.`,
+            businessImpact: `Production throughput increased 85% to 740 units per hour after removing the manual inspection bottleneck. Escape defects dropped from 23 PPM to 2 PPM—a 91% improvement. Inspection labor costs decreased $1.8 million annually while improving consistency and reliability.
+
+The system detected a tooling wear pattern before it caused defects, enabling predictive maintenance that prevented $340,000 in potential scrap. Customer complaints related to quality decreased 78%. The facility achieved ISO quality certification with the automated system as a key capability demonstration.`,
+            lessonsLearned: `Synthetic data generation was essential for rare defect categories, but required careful validation to ensure generated defects matched production reality. We learned that lighting consistency matters more than camera resolution—investing in controlled illumination improved accuracy more than upgrading cameras.
+
+The edge deployment architecture proved critical for reliability—cloud-dependent systems would have failed during network outages. Operator acceptance required demonstrating that the system caught defects they missed, not just replacing their function. Continuous learning is essential as new defect types emerge; the active learning pipeline now processes 500 uncertain predictions daily.`
+        };
+
+        caseStudies[7] = {
+            subtitle: 'Time Series Forecasting',
+            title: 'Demand Forecasting System',
+            executiveSummary: `A consumer packaged goods company with 2,800 SKUs across 12 product categories needed to transform its demand planning capabilities. This project delivered an enterprise forecasting platform that predicts demand at multiple horizons, enabling optimized inventory, production planning, and promotional execution.
+
+The solution combines classical time series methods with modern machine learning in a hierarchical ensemble. External signals including weather, economic indicators, and marketing calendars improve forecast accuracy for promotional and seasonal patterns. Probabilistic forecasts enable risk-aware decision-making with confidence intervals.`,
+            businessProblem: `Forecast error averaged 35% at the SKU-week level, resulting in $24 million in excess inventory and $18 million in stockouts annually. The legacy system used simple moving averages with manual adjustments, failing to capture complex demand patterns and promotional effects.
+
+The challenge was forecasting at multiple aggregation levels—daily store-level for replenishment, weekly warehouse-level for allocation, and monthly national-level for production planning. Promotional lifts varied dramatically by promotion type, product category, and store format. New product introductions lacked historical data for traditional forecasting.`,
+            technicalArchitecture: `The platform uses a microservices architecture with separate services for data ingestion, feature engineering, model training, and forecast serving. Prophet handles trend and seasonality decomposition. Gradient-boosted trees (LightGBM) model promotional and external factor effects. DeepAR provides probabilistic forecasts with uncertainty quantification.
+
+Hierarchical reconciliation ensures forecasts sum appropriately across levels using optimal combination methods. A feature store maintains time-series features including lagged values, rolling statistics, and calendar effects. Forecasts are exposed through REST APIs and exported to ERP systems.`,
+            dataStrategy: `Historical sales data spans 5 years at daily granularity across all channels. External data includes weather (temperature, precipitation), economic indicators (unemployment, consumer confidence), marketing events (promotions, advertising spend), and competitive activity. Product attributes include category, subcategory, brand, pack size, and price tier.
+
+Feature engineering creates 400+ time-series features including lagged sales (1-56 days), rolling means/stds, year-ago comparisons, and promotional flags. Categorical variables are encoded using target encoding with regularization. Missing data is imputed using interpolation and pattern matching to similar products.`,
+            modelPerformance: `The ensemble model achieves MAPE of 12.3% at SKU-week level, improving to 7.8% at category-month level. Promotional periods show 18.2% MAPE—challenging but significantly better than the 42% baseline. Bias is minimal at +1.2%, indicating well-calibrated forecasts.
+
+Probabilistic forecasts achieve 87% coverage for 80% prediction intervals. New product forecasting using analogous product matching achieves 22% MAPE in the first 12 weeks. Model performance is monitored continuously with automatic retraining triggered when WAPE degrades by more than 2 percentage points.`,
+            implementationStrategy: `Deployment used a parallel run approach where ML forecasts were generated alongside legacy forecasts for 6 months. Forecast accuracy comparison convinced planners of the system's value. Gradual transition moved categories one at a time, with extensive training for demand planning teams.
+
+Integration with SAP APO and JDA software required custom ETL development. Change management addressed planner concerns about "black box" models through extensive explainability features. Governance processes ensure forecast overrides are logged and analyzed for model improvement.`,
+            businessImpact: `Forecast accuracy improvement reduced safety stock requirements by $31 million while maintaining 98.5% service levels. Stockout-related lost sales decreased by $12 million annually. Production planning efficiency improved with 23% reduction in changeover costs through better demand visibility.
+
+Promotional forecasting accuracy enabled more effective trade promotion planning, increasing promotional ROI by 34%. The probabilistic forecasts supported scenario planning during COVID-19 demand volatility, helping the company navigate unprecedented uncertainty. Working capital efficiency improved, freeing $45 million for strategic investment.`,
+            lessonsLearned: `Ensemble approaches significantly outperformed any single method—combining Prophet, LightGBM, and DeepAR captured different pattern types effectively. External signals provided meaningful lift, but feature engineering mattered more than model complexity. Hierarchical reconciliation was essential for organizational adoption—forecasts that didn't sum correctly were rejected regardless of accuracy.
+
+We learned that planner judgment still adds value, especially for events without historical precedent. The final system supports collaborative forecasting with planner overrides tracked and analyzed. New product forecasting remains challenging—we achieved best results using analogous product matching rather than pure attribute-based approaches.`
+        };
+
+        caseStudies[8] = {
+            subtitle: 'Deep Learning',
+            title: 'Fraud Detection Network',
+            executiveSummary: `A payment processor handling $47 billion in annual transaction volume needed to combat increasingly sophisticated fraud attacks. This project delivered a real-time fraud detection system using deep learning to identify anomalous patterns, reducing fraud losses while minimizing false declines that frustrate legitimate customers.
+
+The solution implements a graph neural network that models relationships between entities (cards, merchants, devices, locations) to detect coordinated fraud rings and emerging attack patterns. Real-time scoring at sub-100ms latency enables transaction authorization decisions without customer friction.`,
+            businessProblem: `Fraud losses reached $89 million annually with false decline rates of 3.2%—declining legitimate transactions worth an estimated $340 million in lost merchant revenue. Rule-based systems generated excessive false positives and couldn't adapt to evolving attack patterns. Fraudsters increasingly used synthetic identities and account takeover techniques that evaded traditional detection.
+
+The challenge was detecting fraud in real-time with incomplete information—the authorization decision must complete before the transaction settles. Adversarial attackers continuously evolved tactics to evade detection. The solution needed to handle 12,000 transactions per second with 99.99% availability.`,
+            technicalArchitecture: `The system uses a Lambda architecture combining batch model training with real-time stream processing. Kafka streams ingest transaction events with Flink performing feature enrichment. The detection model uses a GraphSAGE architecture implemented in PyTorch Geometric, learning entity embeddings from transaction graphs.
+
+Real-time scoring uses a two-stage approach: a lightweight random forest filters obvious legitimate transactions, with graph neural network scoring for the remainder. Redis maintains entity state and recent transaction history. Model serving uses TorchServe with GPU acceleration. Results feed into a rules engine for final authorization decisions.`,
+            dataStrategy: `Training data includes 3 years of labeled transactions with confirmed fraud outcomes. Graph construction links cards, merchants, devices, IPs, and emails through shared attributes. Node features include transaction patterns, velocity metrics, and behavioral profiles. Edge features capture transaction amounts, timestamps, and outcomes.
+
+Negative sampling addresses extreme class imbalance (0.08% fraud rate). Graph augmentation through edge dropout improves generalization. Temporal train-test splits ensure realistic evaluation—models are trained on older data and tested on newer data to simulate production deployment.`,
+            modelPerformance: `The fraud detection model achieves 94.2% fraud detection rate at 0.5% false positive rate—significantly better than the 78% detection rate at 3.2% FPR baseline. Graph-based features provide 23% lift over transactional features alone. The model detects 67% of fraud in the first fraudulent transaction, preventing subsequent losses.
+
+Real-time latency averages 45ms with p99 of 82ms, well within authorization time budgets. Model performance degrades gracefully under load, maintaining 92% detection rate at 2x normal throughput. Adversarial robustness testing confirms resistance to common evasion techniques.`,
+            implementationStrategy: `Deployment used a shadow mode period where model scores were logged but not used for decisions, enabling performance validation against ground truth. Gradual rollout increased traffic from 5% to 100% over 8 weeks with continuous monitoring. Fallback to rule-based system maintained throughout transition.
+
+Integration with authorization systems required developing high-performance APIs with circuit breakers and rate limiting. Alerting systems notify fraud analysts of high-risk transactions requiring manual review. Model retraining occurs weekly with performance validation before deployment.`,
+            businessImpact: `Fraud losses decreased by $34 million (38% reduction) in the first year. False declines dropped from 3.2% to 0.9%, recovering an estimated $180 million in legitimate transaction volume. Customer satisfaction improved with 23% reduction in complaints about declined transactions.
+
+The system detected 14 coordinated fraud rings in the first 6 months, enabling law enforcement collaboration that prevented an estimated $12 million in additional losses. Merchant retention improved as fraud-related chargebacks decreased. The platform became a competitive differentiator in payment processor RFPs.`,
+            lessonsLearned: `Graph neural networks provided substantial lift for detecting coordinated attacks, but required significant engineering investment for scalable implementation. Feature engineering on graph structure (centrality, clustering coefficients) was as important as learned embeddings. The two-stage scoring approach was essential for latency—running GNN on every transaction would have exceeded time budgets.
+
+We learned that fraud patterns evolve rapidly—weekly retraining was necessary to maintain performance. Explainability features helped fraud analysts trust and act on model predictions. The adversarial nature of fraud means models must be continuously monitored for performance degradation and attack pattern shifts.`
+        };
+
+        caseStudies[9] = {
+            subtitle: 'Anomaly Detection',
+            title: 'IoT Anomaly Detector',
+            executiveSummary: `An industrial equipment manufacturer with 12,000 connected machines across customer sites needed to predict failures before they occurred. This project delivered an IoT anomaly detection platform that identifies early warning signs of equipment degradation, enabling predictive maintenance and minimizing unplanned downtime.
+
+The solution combines unsupervised anomaly detection with physics-informed failure mode models. Time-series analysis of sensor data identifies deviations from normal operating patterns, while domain knowledge constrains detection to meaningful failure precursors. Edge computing enables real-time alerting even with intermittent connectivity.`,
+            businessProblem: `Unplanned equipment downtime cost customers an estimated $450 million annually in lost productivity, damaging the manufacturer's reputation and service contract profitability. Reactive maintenance resulted in catastrophic failures that could have been prevented with early intervention. Customers demanded higher equipment availability and predictable maintenance schedules.
+
+The challenge was extreme heterogeneity—12 equipment models across 5 product lines with different sensor configurations and operating contexts. Normal behavior varied dramatically by application, environment, and operator practices. Labeled failure data was scarce since catastrophic failures were rare and preventive maintenance often intervened before failure occurred.`,
+            technicalArchitecture: `The platform uses a three-tier architecture: edge gateways, regional aggregators, and central analytics. Edge devices run lightweight anomaly detection models (isolation forests) for immediate alerting. Regional aggregators maintain equipment-specific baselines and coordinate model updates. Central analytics trains deep learning models and manages the model lifecycle.
+
+The detection pipeline includes signal preprocessing, feature extraction, anomaly scoring, and alert generation. LSTM autoencoders learn normal operating patterns and flag reconstructions with high error. Physics-based models encode known failure modes for targeted monitoring. Results are visualized in customer-facing dashboards and integrated with service management systems.`,
+            dataStrategy: `Sensor data includes vibration, temperature, pressure, current, and operational parameters sampled at 1-100 Hz depending on criticality. Historical data spans 4 years with 2.4 trillion sensor readings. Equipment metadata includes model, configuration, operating hours, and maintenance history. Environmental data captures ambient temperature, humidity, and altitude.
+
+Feature engineering extracts time-domain statistics, frequency-domain signatures (FFT), and time-frequency representations (wavelets). Anomaly detection uses unsupervised methods (isolation forest, LSTM autoencoder) trained only on normal operation data. Transfer learning enables model adaptation to new equipment variants with limited data.`,
+            modelPerformance: `The anomaly detection system identifies 87% of failures with median warning time of 14 days—sufficient for scheduled maintenance intervention. False positive rate is 2.3% of operating hours, manageable for field service capacity. Early detection prevents 73% of catastrophic failures that would result in extended downtime.
+
+Per-equipment-type performance varies: high-criticality rotating equipment (92% detection, 18-day warning), hydraulic systems (84% detection, 11-day warning), and electrical systems (79% detection, 9-day warning). Model confidence scores enable alert prioritization, with high-confidence alerts having 94% precision.`,
+            implementationStrategy: `Deployment followed a pilot program with 50 high-value customer sites over 6 months. Feedback from field service engineers refined alert thresholds and diagnostic guidance. Gradual expansion added equipment types and customer sites, reaching full deployment in 18 months.
+
+Integration with service management systems (ServiceMax, Salesforce) automatically creates work orders for high-confidence alerts. Customer dashboards provide visibility into equipment health and recommended actions. Training programs helped service technicians interpret anomaly alerts and perform targeted inspections.`,
+            businessImpact: `Predictive maintenance reduced unplanned downtime by 67%, saving customers an estimated $300 million annually. Service contract profitability improved 34% through optimized parts inventory and technician dispatch. Equipment availability increased from 94.2% to 97.8%, becoming a key sales differentiator.
+
+The system enabled a transition to outcome-based service contracts where customers pay for uptime rather than maintenance visits. Customer satisfaction scores improved 28 points. The platform generated $45 million in incremental service revenue through premium monitoring subscriptions.`,
+            lessonsLearned: `Unsupervised methods were essential given limited labeled failure data, but required careful tuning to avoid alert fatigue. Physics-informed constraints improved precision by focusing on known failure modes rather than all anomalies. Edge computing was critical for reliability—cloud-only solutions would miss failures during network outages.
+
+We learned that customer context matters significantly—an anomaly in one application might be normal in another. Equipment-specific baselines were necessary rather than one-size-fits-all thresholds. The human-in-the-loop approach, where technicians confirm and investigate alerts, improved both accuracy and trust in the system.`
+        };
+
+        caseStudies[10] = {
+            subtitle: 'Reinforcement Learning',
+            title: 'Dynamic Pricing Optimizer',
+            executiveSummary: `An airline with 2,400 daily flights across 180 routes sought to optimize revenue through dynamic pricing. This project delivered a reinforcement learning system that adjusts fares in real-time based on demand patterns, competitive positioning, and inventory constraints—maximizing revenue per available seat mile.
+
+The solution implements a contextual bandit algorithm that balances exploration (testing price points) with exploitation (choosing known optimal prices). The system responds to booking patterns, competitive price changes, and market conditions within minutes, far faster than traditional revenue management approaches.`,
+            businessProblem: `The airline's legacy revenue management system used static fare classes with limited price points, updated at most daily. Competitors with more dynamic pricing captured market share on price-sensitive routes. Load factors varied dramatically—some flights sold out weeks in advance while others departed with 30% empty seats.
+
+The challenge was the curse of dimensionality—pricing decisions must consider origin-destination pair, days to departure, current bookings, competitive prices, seasonality, day of week, and customer segment. Traditional optimization approaches couldn't handle this complexity in real-time. The solution needed to integrate with existing reservation systems without disrupting operations.`,
+            technicalArchitecture: `The system uses a contextual bandit architecture with Thompson Sampling for exploration-exploitation balance. Context features include flight attributes, current booking level, competitive prices, time to departure, and historical demand patterns. Actions are price adjustments within defined bounds. Rewards are incremental revenue compared to baseline pricing.
+
+The model is implemented using Vowpal Wabbit for efficient online learning. A/B testing framework evaluates pricing strategies against holdout groups. Simulation environment using historical data enables offline policy evaluation before deployment. Integration with the PSS (Passenger Service System) uses message queues for price updates.`,
+            dataStrategy: `Training data includes 5 years of booking transactions with associated prices, flight details, and competitive fares. Context features span 120 dimensions including route characteristics, schedule quality, and market conditions. Reward signals capture both immediate revenue and estimated long-term customer value.
+
+Exploration is constrained to price variations within ±15% of current levels to limit revenue risk. Historical data enables off-policy evaluation using inverse propensity weighting. Simulation validates expected performance before production deployment. Continuous learning updates the model as new booking data arrives.`,
+            modelPerformance: `The dynamic pricing system increases revenue per available seat mile (RASM) by 4.2% compared to legacy pricing—translating to $127 million annually. Load factor variance decreased 23% through better demand balancing. Price competitiveness improved with 34% faster response to competitive moves.
+
+A/B testing shows consistent lift across route types: business-heavy routes (+3.1% RASM), leisure routes (+5.8% RASM), and competitive trunk routes (+4.5% RASM). The system maintains price integrity with 98.7% of prices within policy bounds. Customer satisfaction remained stable despite increased price variability.`,
+            implementationStrategy: `Deployment used extensive simulation validation followed by limited A/B testing on 5% of routes. Gradual expansion increased coverage as performance was validated. Full deployment across all routes occurred over 9 months with continuous monitoring for revenue impact.
+
+Integration with revenue management systems required careful API development to ensure price consistency across channels. Training helped revenue analysts understand the system's recommendations and override appropriately. Governance processes ensure pricing remains within regulatory and policy constraints.`,
+            businessImpact: `Annual revenue increased $127 million (4.2% RASM improvement) with minimal incremental cost. Load factor optimization reduced empty seats by 12%, improving asset utilization. Competitive response time decreased from hours to minutes, protecting market share on contested routes.
+
+The system enabled more granular customer segmentation with 23 price points versus 7 historically. Revenue management analyst productivity improved 40% as the system automated routine pricing decisions. The platform became a strategic asset in merger discussions, demonstrating advanced revenue management capabilities.`,
+            lessonsLearned: `Contextual bandits proved effective for pricing optimization, providing better exploration-exploitation balance than traditional A/B testing. The simulation environment was essential for validating policies before production—direct deployment would have risked significant revenue loss during learning.
+
+We learned that exploration must be carefully constrained in revenue-critical applications. Starting with narrow price bounds and gradually expanding as confidence increased proved successful. The system required close monitoring for competitive gaming—competitors occasionally probed to trigger price wars, requiring defensive logic.`
+        };
+
+        // Projects 11-20 Case Studies
+        caseStudies[11] = {
+            subtitle: 'Predictive Maintenance',
+            title: 'Predictive Maintenance Suite',
+            executiveSummary: `A manufacturing conglomerate operating 340 facilities worldwide needed to unify equipment maintenance across diverse industrial assets. This project delivered a comprehensive predictive maintenance platform that integrates vibration analysis, thermal imaging, oil analysis, and operational data to predict failures across multiple asset types.
+
+The solution provides a single pane of glass for maintenance teams while accommodating the unique characteristics of different equipment categories—from CNC machines to HVAC systems to conveyor networks. Machine learning models tailored to each asset type deliver actionable maintenance recommendations with confidence scoring.`,
+            businessProblem: `Reactive maintenance resulted in $180 million annual losses from unplanned downtime, emergency repairs, and secondary damage from cascading failures. Each facility used different maintenance approaches, preventing knowledge sharing and economies of scale. Critical assets lacked monitoring while less important equipment was over-maintained.
+
+The challenge was extreme asset diversity—47 equipment categories with different failure modes, sensor availability, and criticality levels. Maintenance expertise was siloed by facility and asset type. Integration with existing CMMS (Computerized Maintenance Management Systems) was essential for workflow integration.`,
+            technicalArchitecture: `The platform uses a modular microservices architecture with asset-specific prediction modules unified under a common API layer. Data ingestion handles multiple protocols (OPC-UA, Modbus, MQTT) through protocol adapters. Feature engineering pipelines are customized per asset type but share common infrastructure.
+
+The prediction engine combines multiple algorithms: vibration analysis using envelope demodulation, thermal anomaly detection using image segmentation, oil degradation modeling using spectrometry data, and operational parameter trending using statistical process control. A recommendation engine prioritizes maintenance actions based on failure probability, consequence severity, and resource availability.`,
+            dataStrategy: `Data sources include vibration sensors (accelerometers, velocity probes), thermal cameras, oil analysis labs, SCADA systems, and maintenance history records. Historical data spans 6 years with 850,000 work orders and 4.2 billion sensor readings. Asset master data includes specifications, BOMs, criticality ratings, and maintenance procedures.
+
+Feature engineering extracts condition indicators specific to each asset type: bearing defect frequencies for rotating equipment, thermal patterns for electrical systems, particle counts for hydraulic systems. Data quality pipelines handle missing sensors, calibration drift, and communication failures.`,
+            modelPerformance: `The system predicts 82% of failures with average warning time of 21 days across all asset types. Per-category performance: rotating equipment (89% detection, 28-day warning), electrical systems (76% detection, 14-day warning), hydraulic systems (81% detection, 18-day warning), and thermal systems (78% detection, 12-day warning).
+
+False positive rates average 8% of maintenance recommendations—manageable with confidence-based prioritization. The recommendation engine correctly identifies the top 20% of maintenance needs that prevent 67% of potential downtime. Cost-benefit analysis shows $4.30 saved for every $1 invested in predictive maintenance.`,
+            implementationStrategy: `Deployment followed a phased rollout by facility and asset criticality. Phase 1 covered 12 pilot facilities with highest-value assets over 8 months. Phase 2 expanded to 87 facilities over 18 months. Phase 3 completed enterprise deployment across all 340 facilities.
+
+Integration with SAP PM and IBM Maximo CMMS systems enables automatic work order creation. Mobile applications provide technicians with asset history, diagnostic guidance, and work order management. Executive dashboards track program ROI and maintenance KPIs across the enterprise.`,
+            businessImpact: `Unplanned downtime decreased by 54%, saving $97 million annually. Maintenance costs decreased 23% through elimination of unnecessary preventive maintenance and optimization of spare parts inventory. Equipment life extended by an average of 18% through better operating condition management.
+
+The platform enabled consolidation of maintenance vendors and standardization of best practices across facilities. Safety incidents related to equipment failure decreased 41%. The predictive maintenance program became a showcase for customer facility tours, demonstrating operational excellence.`,
+            lessonsLearned: `Asset-specific models were essential—generic approaches failed to capture the unique failure signatures of different equipment types. Integration with existing CMMS systems was more complex than anticipated, requiring extensive customization for each platform. Change management was critical—maintenance teams needed training and support to transition from time-based to condition-based maintenance.
+
+We learned that confidence scoring was essential for adoption—maintenance planners needed to understand prediction reliability to prioritize work effectively. The platform's value increased over time as more data improved model accuracy and historical trends enabled better lifecycle planning.`
+        };
+
+        caseStudies[12] = {
+            subtitle: 'Clustering & Segmentation',
+            title: 'Customer Segmentation Engine',
+            executiveSummary: `A retail bank with 8 million customers needed to move beyond simple demographic segmentation to behavior-based customer understanding. This project delivered an advanced segmentation platform that identifies distinct customer personas based on transaction patterns, product usage, channel preferences, and life stage indicators.
+
+The solution uses ensemble clustering combining multiple algorithms to identify robust, actionable segments. Dynamic segment assignment updates as customer behavior evolves, enabling timely marketing and service personalization. The segments directly inform product development, marketing campaigns, and customer experience design.`,
+            businessProblem: `Marketing campaigns using demographic segmentation achieved only 2.3% response rates with poor conversion. Product development lacked customer insight, resulting in features that didn't address real needs. Customer service treated all customers identically, missing opportunities for personalized experiences.
+
+The challenge was the high dimensionality of customer data—thousands of potential features across transaction history, product holdings, digital behavior, and external data. Traditional clustering produced unstable segments that changed dramatically with small parameter adjustments. Segments needed to be interpretable and actionable for business users.`,
+            technicalArchitecture: `The platform uses a stacked clustering approach: PCA reduces dimensionality, multiple clustering algorithms (K-Means, DBSCAN, Hierarchical) generate candidate segmentations, and an ensemble method combines them for stability. Silhouette analysis and business interpretability guide final segment selection.
+
+Feature engineering creates 400+ behavioral variables: transaction frequency patterns, product combination signatures, channel usage ratios, and life stage indicators. The segmentation pipeline runs monthly, updating segment assignments as behavior evolves. APIs expose segments to marketing automation, CRM, and analytics systems.`,
+            dataStrategy: `Data sources include core banking transactions, product holdings, digital channel logs, customer service interactions, and external demographic data. Historical data spans 5 years enabling trend analysis. Privacy-compliant handling ensures no personally identifiable information is exposed.
+
+Feature selection uses mutual information to identify variables with maximum discriminative power. Standardization and outlier treatment prepare data for clustering. Stability testing validates that segments are robust to sampling variation and algorithm initialization.`,
+            modelPerformance: `The ensemble clustering identifies 12 distinct customer segments with silhouette score of 0.68 indicating well-separated clusters. Segment stability testing shows 94% consistency across bootstrap samples. Business validation confirms segments are interpretable and actionable.
+
+Segment characteristics reveal distinct personas: "Digital Natives" (18% of customers, high mobile usage), "Wealth Builders" (8%, investment-focused), "Everyday Bankers" (34%, transactional), "Credit Dependent" (12%, loan-heavy), and others. Segment sizes are stable month-to-month with 3% average migration.`,
+            implementationStrategy: `Deployment integrated segments into marketing campaign management, CRM agent desktops, and product analytics. Marketing teams received training on segment characteristics and optimal messaging. A/B testing validated segment-specific campaigns against control groups.
+
+Governance processes ensure segments are reviewed quarterly for continued relevance. Feedback loops track campaign performance by segment to identify model drift. Privacy impact assessments ensure compliant use of segmentation data.`,
+            businessImpact: `Marketing campaign response rates increased to 7.8% (from 2.3%) through segment-specific messaging. Customer acquisition costs decreased 34% by targeting lookalikes of high-value segments. Cross-sell success improved 45% through product recommendations matched to segment needs.
+
+Customer satisfaction improved 15 points as service became more personalized. Product development prioritized features for high-growth segments, accelerating revenue growth. The segmentation framework became foundational for strategic planning, informing branch network optimization and digital roadmap priorities.`,
+            lessonsLearned: `Ensemble clustering provided more stable and interpretable segments than any single algorithm. Feature engineering was more important than algorithm choice—behavioral variables significantly outperformed demographic features. Segment interpretability was essential for business adoption—mathematically optimal but uninterpretable segments were rejected.
+
+We learned that segments evolve over time and require regular refresh—annual resegmentation maintained relevance as customer behavior shifted. The dynamic assignment approach, where customers can move between segments, proved more useful than static segmentation for tracking lifecycle progression.`
+        };
+
+        caseStudies[13] = {
+            subtitle: 'Natural Language Processing',
+            title: 'Intelligent Document Processor',
+            executiveSummary: `An insurance company processing 2.4 million documents annually needed to automate extraction of structured data from unstructured documents. This project delivered an intelligent document processing platform that extracts information from claims forms, medical records, policy applications, and correspondence with human-level accuracy.
+
+The solution combines optical character recognition (OCR), natural language understanding, and layout analysis to handle diverse document types. Machine learning models trained on domain-specific data achieve extraction accuracy that meets straight-through processing requirements, dramatically reducing manual data entry.`,
+            businessProblem: `Manual document processing cost $23 million annually in data entry labor and caused 12-day average processing delays. Data entry errors resulted in 4.3% of policies requiring correction, frustrating customers and agents. Peak volumes during catastrophe events overwhelmed processing capacity, creating backlogs that persisted for weeks.
+
+The challenge was document diversity—over 400 document types with varying layouts, formats, and quality levels. Handwritten sections, poor scan quality, and complex tables complicated extraction. The solution needed to achieve 98%+ accuracy to enable straight-through processing without human verification.`,
+            technicalArchitecture: `The platform uses a pipeline architecture: document classification identifies document type, OCR extracts text and layout information, entity extraction identifies relevant data points, and validation ensures data consistency. The OCR engine uses Tesseract enhanced with custom training on insurance documents.
+
+Named entity recognition uses fine-tuned BERT models for domain-specific entities (policy numbers, coverage amounts, medical codes). Layout analysis using Detectron2 identifies table structures and form fields. Business rules validate extracted data against policy databases and flag exceptions for human review.`,
+            dataStrategy: `Training data includes 1.8 million labeled documents spanning all major document types. Synthetic data generation creates variations in quality, rotation, and noise to improve robustness. Active learning prioritizes documents with low confidence for human labeling, continuously expanding the training set.
+
+Document classification uses visual features (layout patterns) and textual features (header content) combined in a multimodal model. Entity extraction models are customized for each document type, recognizing domain-specific fields like diagnosis codes, procedure codes, and coverage limits.`,
+            modelPerformance: `Document classification achieves 99.2% accuracy across 400+ document types. Field-level extraction accuracy averages 97.8%, with 98.5% for typed fields and 94.2% for handwritten fields. End-to-end straight-through processing rate is 76% of documents requiring no human intervention.
+
+Per-document-type performance: policy applications (98.1% field accuracy), claims forms (97.4%), medical records (96.8%), and correspondence (95.2%). Processing time averages 8 seconds per document versus 12 minutes for manual entry. Confidence scores correctly identify 94% of extraction errors for human review.`,
+            implementationStrategy: `Deployment used a shadow mode where automated extraction ran parallel to manual entry for validation. Gradual rollout replaced manual processing for high-accuracy document types first, expanding as confidence increased. Exception handling workflows ensured smooth handoff when automation failed.
+
+Integration with core policy administration and claims systems required API development and data mapping. Training programs helped processing staff transition from data entry to exception handling and quality assurance. Continuous monitoring tracks accuracy and processing times by document type.`,
+            businessImpact: `Document processing costs decreased by $16 million (70% reduction) through automation. Processing time decreased from 12 days to 1.2 days average, improving customer satisfaction. Error rates decreased from 4.3% to 0.7%, reducing rework and improving data quality.
+
+Catastrophe response capacity increased 5x without additional staffing. Employee satisfaction improved as staff moved from repetitive data entry to higher-value exception handling and customer service. The platform enabled expansion into new markets without proportional processing cost increases.`,
+            lessonsLearned: `Domain-specific training was essential—generic OCR and NLP models achieved only 82% accuracy on insurance documents. Layout analysis was as important as text recognition for structured forms. Handwriting recognition remained challenging and required ongoing model refinement.
+
+We learned that confidence scoring was critical for operational deployment—knowing when to escalate to humans prevented error propagation. The active learning approach continuously improved accuracy by targeting labeling effort on uncertain predictions. Document quality at ingestion significantly impacted accuracy—investing in scan quality guidelines improved end-to-end performance.`
+        };
+
+        caseStudies[14] = {
+            subtitle: 'Optimization',
+            title: 'Route Optimization Engine',
+            executiveSummary: `A last-mile delivery company with 4,200 drivers making 180,000 daily deliveries needed to optimize routing for efficiency and customer satisfaction. This project delivered a real-time route optimization platform that minimizes drive time while respecting delivery windows, vehicle constraints, and driver preferences.
+
+The solution solves the vehicle routing problem with time windows (VRPTW) using hybrid optimization combining exact methods, heuristics, and machine learning. Real-time reoptimization handles dynamic events like traffic, new orders, and failed deliveries. The system scales to solve city-wide routing problems in under 5 minutes.`,
+            businessProblem: `Manual route planning resulted in 34% inefficiency compared to optimal routes, costing $47 million annually in excess fuel and labor. Late deliveries affected 18% of orders, damaging customer relationships and increasing redelivery costs. Driver satisfaction was low due to inefficient routes and unrealistic schedules.
+
+The challenge was problem scale—optimizing 4,200 vehicles across 180,000 stops with time windows, vehicle capacities, driver skills, and customer preferences. Real-time constraints required reoptimization as conditions changed. The solution needed to integrate with driver mobile apps, warehouse systems, and customer notification platforms.`,
+            technicalArchitecture: `The optimization engine uses a hybrid approach: constraint programming generates feasible solutions, simulated annealing improves them, and machine learning predicts travel times and service durations. OR-Tools provides the optimization framework with custom cost functions.
+
+Real-time components include traffic integration (Google Maps API), dynamic reoptimization triggers, and driver mobile apps with turn-by-turn navigation. The system architecture separates long-term planning (daily routes) from real-time adjustments (intra-day changes). APIs expose routes to dispatch systems and driver devices.`,
+            dataStrategy: `Data sources include delivery addresses with geocoding, time windows, package dimensions and weights, vehicle capacities and capabilities, historical traffic patterns, and actual service times. Historical data spans 3 years with 180 million completed deliveries enabling accurate duration prediction.
+
+Travel time prediction uses gradient-boosted models incorporating time of day, day of week, weather, and historical traffic. Service time models account for package count, building type, and access constraints. Clustering identifies delivery density zones for route construction.`,
+            modelPerformance: `Route optimization reduces total drive time by 28% compared to manual planning—saving $31 million annually in fuel and labor costs. On-time delivery rate improved from 82% to 96%. Average stops per hour increased from 4.2 to 5.8, improving driver productivity.
+
+Optimization solves 4,200-vehicle problems in 4.5 minutes on average. Real-time reoptimization handles 12,000 daily events (new orders, cancellations, traffic delays) with sub-minute response. Driver satisfaction scores improved 34 points due to more realistic and efficient routes.`,
+            implementationStrategy: `Deployment used parallel operation where optimized routes were suggested alongside manual plans for driver choice. Gradual rollout expanded from 5% to 100% of routes over 6 months as confidence increased. Driver feedback refined constraints and preferences.
+
+Integration with driver mobile apps provided turn-by-turn navigation and delivery confirmation. Customer notifications integrated with the company's tracking platform. Dispatch dashboards enabled manual override when needed with clear visualization of route efficiency.`,
+            businessImpact: `Annual operational cost savings of $31 million from route efficiency. Customer satisfaction improved 23 points with on-time delivery increasing to 96%. Driver retention improved 18% as route quality increased job satisfaction.
+
+The platform enabled dynamic delivery options (same-day, time-window) that generated $45 million in incremental revenue. Carbon emissions decreased 22% through reduced drive distances. The optimization capability became a competitive advantage in contract renewals and new business pitches.`,
+            lessonsLearned: `Hybrid optimization combining exact and heuristic methods outperformed pure approaches for this problem scale. Travel time prediction accuracy was critical—optimizing with poor time estimates produced infeasible routes. Driver acceptance required incorporating their preferences and constraints into the optimization model.
+
+We learned that real-time reoptimization was essential for operational reality—static daily routes failed when conditions changed. The system needed graceful degradation under extreme conditions (severe weather, system outages) with fallback to simplified routing. Continuous monitoring of actual vs. predicted times enabled model improvement.`
+        };
+
+        caseStudies[15] = {
+            subtitle: 'Supply Chain',
+            title: 'Supply Chain Optimizer',
+            executiveSummary: `A global consumer goods company with operations in 67 countries needed to optimize its end-to-end supply chain. This project delivered an integrated planning platform that optimizes inventory, production, and distribution decisions across a complex multi-echelon network.
+
+The solution combines demand forecasting, inventory optimization, and network flow optimization in a unified framework. Machine learning models predict demand and supply variability, while mathematical programming optimizes decisions considering costs, capacities, and service level constraints.`,
+            businessProblem: `Supply chain costs reached 18% of revenue—$2.1 billion annually—with excessive inventory, expedited shipping, and production inefficiencies. Stockouts in key markets resulted in $340 million lost sales annually. Planning processes were siloed across functions, preventing holistic optimization.
+
+The challenge was network complexity—47 manufacturing plants, 180 distribution centers, and 12,000 SKUs with different demand patterns and supply constraints. Long lead times (8-16 weeks) required planning far in advance with significant uncertainty. The solution needed to integrate with existing ERP systems and planning processes.`,
+            technicalArchitecture: `The platform uses a hierarchical optimization approach: strategic network design (annual), tactical planning (monthly), and operational scheduling (daily). Demand forecasting uses ensemble methods combining statistical and ML approaches. Inventory optimization uses stochastic programming to set safety stocks. Distribution optimization solves multi-commodity flow problems.
+
+The architecture integrates with SAP APO and Oracle ERP through middleware. Optimization models are built in Pyomo and solved with Gurobi. Simulation capabilities enable scenario analysis and plan validation. Dashboards provide visibility into plans, performance, and exceptions.`,
+            dataStrategy: `Data sources include historical demand by SKU-location, bill of materials, production capacities, transportation lanes and costs, supplier lead times, and inventory policies. External data includes commodity prices, exchange rates, and economic indicators. Data quality pipelines address master data inconsistencies.
+
+Demand forecasting generates SKU-location-week level predictions with uncertainty quantification. Inventory optimization uses service level targets and demand variability to set optimal safety stocks. Network optimization considers production constraints, transportation capacities, and inventory holding costs.`,
+            modelPerformance: `Demand forecasting achieves MAPE of 12.3% at SKU-warehouse level, improving to 7.8% at aggregate category level. Inventory optimization reduces total inventory investment by 18% while maintaining 98.5% service levels. Distribution optimization reduces transportation costs by 14% through better load consolidation and routing.
+
+Integrated planning improves forecast bias from +8.2% to +1.4%, reducing the bullwhip effect. Safety stock optimization reduces stockouts by 67% while decreasing inventory. Production planning efficiency improves with 23% reduction in changeover costs through better campaign sequencing.`,
+            implementationStrategy: `Deployment followed a phased approach by region and planning horizon. Phase 1 implemented demand forecasting globally over 6 months. Phase 2 added inventory optimization for high-value SKUs over 9 months. Phase 3 integrated distribution optimization completing full deployment in 24 months.
+
+Change management addressed planner concerns about automation through extensive training and change control processes. Integration with ERP systems required significant customization. Governance processes ensure model recommendations are reviewed and approved by planning teams.`,
+            businessImpact: `Supply chain costs decreased by $340 million (16% reduction) through inventory optimization, transportation efficiency, and production planning improvements. Stockout-related lost sales decreased by $180 million. Working capital improved by $420 million through inventory reduction.
+
+Customer service levels improved from 94.2% to 98.5%. Planning cycle time decreased from 5 days to 8 hours, enabling more frequent plan updates. The platform enabled scenario planning during supply disruptions, helping navigate COVID-19 challenges with minimal service impact.`,
+            lessonsLearned: `Integration of planning functions was essential—optimizing inventory without considering demand uncertainty or production constraints produced suboptimal results. Data quality was the biggest implementation challenge—extensive master data cleanup was required before optimization could be effective.
+
+We learned that planner judgment remained valuable for events without historical precedent. The final system supports collaborative planning with model recommendations and planner overrides tracked. Stochastic optimization, while computationally expensive, significantly outperformed deterministic approaches for safety stock setting.`
+        };
+
+        caseStudies[16] = {
+            subtitle: 'Healthcare AI',
+            title: 'Healthcare AI Diagnostics',
+            executiveSummary: `A healthcare network with 47 hospitals sought to improve diagnostic accuracy and speed through AI-powered clinical decision support. This project delivered a comprehensive diagnostic assistance platform that analyzes medical imaging, lab results, and clinical notes to flag potential conditions for physician review.
+
+The solution assists clinicians across multiple specialties: radiology image analysis, pathology slide screening, ECG interpretation, and clinical documentation analysis. The AI acts as a second set of eyes, catching potential issues that might be missed in busy clinical environments while maintaining physician control over final decisions.`,
+            businessProblem: `Diagnostic errors affected 12% of cases, with 4% resulting in serious harm or death. Physician burnout was at crisis levels, with clinicians spending 2 hours on administrative tasks for every hour of patient care. Radiologist backlogs resulted in 72-hour average turnaround for non-urgent imaging studies.
+
+The challenge was clinical accuracy requirements—AI assistance must achieve expert-level performance to be clinically useful. Regulatory compliance (FDA clearance) was required for diagnostic applications. Integration with clinical workflows was essential—solutions that added friction would be rejected regardless of accuracy.`,
+            technicalArchitecture: `The platform uses specialty-specific AI modules unified under a common clinical interface. Radiology uses 3D CNNs for CT/MRI analysis and 2D CNNs for X-ray and mammography. Pathology uses slide tiling with attention mechanisms for whole-slide analysis. NLP models analyze clinical notes for diagnostic suggestions.
+
+Integration with Epic EHR uses FHIR APIs for data exchange and SMART on FHIR for UI embedding. Results are displayed within existing clinical workflows with appropriate urgency indicators. Audit logging captures all AI recommendations and physician responses for quality improvement and regulatory compliance.`,
+            dataStrategy: `Training data includes 2.4 million imaging studies with radiologist reports, 450,000 pathology slides with diagnoses, and 8 million ECG tracings with cardiology overreads. Data is de-identified following HIPAA Safe Harbor guidelines. Multi-site data collection ensures demographic and equipment diversity.
+
+Model development uses transfer learning from pre-trained models (ImageNet for imaging, clinical BERT for text). Federated learning enables model improvement across sites without centralizing sensitive data. Continuous learning incorporates physician feedback and confirmed diagnoses to improve model accuracy.`,
+            modelPerformance: `Radiology AI achieves 94.2% sensitivity and 91.8% specificity for critical findings detection, comparable to expert radiologists. Pathology screening identifies 97% of positive cases with 78% specificity, reducing pathologist workload by 45%. ECG interpretation achieves 89% accuracy for arrhythmia detection.
+
+Clinical NLP extracts diagnostic suggestions with 87% precision and 82% recall. Physician survey shows 78% find AI suggestions helpful and 84% trust the system for routine screening. Time-to-diagnosis decreased 34% for AI-assisted cases with appropriate urgency flagging.`,
+            implementationStrategy: `Deployment followed FDA guidelines for clinical decision support software. Initial pilot programs at 3 hospitals validated performance and workflow integration. Gradual expansion added specialties and sites with continuous monitoring for accuracy and user satisfaction.
+
+Physician training addressed appropriate use of AI suggestions—emphasizing that AI assists but does not replace clinical judgment. Governance committees oversee AI deployment with representation from clinical, legal, and IT stakeholders. Quality metrics track AI impact on diagnostic accuracy and efficiency.`,
+            businessImpact: `Diagnostic error rates decreased by 23% in AI-assisted specialties. Radiologist report turnaround improved from 72 hours to 18 hours average. Physician documentation time decreased by 45 minutes per day through clinical NLP assistance.
+
+The platform enabled earlier detection of critical conditions—cancer detection at earlier stages increased 18%. Malpractice claims related to missed diagnoses decreased 31%. Physician satisfaction improved 28 points as administrative burden decreased and diagnostic confidence increased.`,
+            lessonsLearned: `Workflow integration was as important as model accuracy—excellent AI that disrupted clinical workflows was rejected. Explainability features helped physicians understand and trust AI suggestions. Regulatory compliance required extensive documentation and validation beyond typical ML deployments.
+
+We learned that continuous monitoring was essential for clinical AI—model performance could degrade with changing patient populations or equipment. Physician feedback loops improved both model accuracy and user satisfaction. The human-AI collaboration model, where AI assists rather than replaces clinicians, proved most effective.`
+        };
+
+        caseStudies[17] = {
+            subtitle: 'FinTech',
+            title: 'Algorithmic Trading System',
+            executiveSummary: `A quantitative hedge fund managing $2.4 billion in assets sought to enhance trading performance through machine learning. This project delivered an algorithmic trading platform that combines traditional quantitative signals with ML-powered alpha generation and risk management.
+
+The solution processes market data, news sentiment, and alternative data sources to identify trading opportunities across equities, futures, and FX markets. Reinforcement learning optimizes execution strategies to minimize market impact. Risk models monitor portfolio exposure in real-time.`,
+            businessProblem: `Traditional factor-based strategies were experiencing alpha decay as markets became more efficient. Execution costs were eroding 23% of gross alpha. Risk management was reactive rather than predictive, resulting in larger drawdowns than necessary.
+
+The challenge was signal-to-noise ratio—financial markets are extremely noisy with low predictability. Overfitting was a constant threat given the high dimensionality of potential features relative to independent observations. The solution needed to operate at microsecond latency for execution while maintaining robust risk controls.`,
+            technicalArchitecture: `The platform uses a multi-layer architecture: data ingestion processes 12 million market data messages per second, feature engineering calculates 4,500 signals, alpha models generate directional forecasts, execution optimizes order placement, and risk monitors portfolio exposure. All components are co-located at exchange data centers.
+
+Alpha models combine gradient-boosted trees for medium-horizon predictions (hours to days) with deep learning for pattern recognition in alternative data. Execution uses reinforcement learning trained on historical market impact data. Risk models use copula-based approaches to capture tail dependencies.`,
+            dataStrategy: `Data sources include market microstructure (L1/L2/L3 data), fundamental data (financial statements, estimates), alternative data (satellite imagery, credit card panels, web traffic), and news/social sentiment. Historical data spans 15 years with tick-level granularity.
+
+Feature engineering creates technical indicators, fundamental ratios, sentiment scores, and cross-asset relationships. Feature selection uses information coefficient analysis and forward-looking validation to prevent overfitting. Data quality pipelines detect and correct for splits, dividends, and corporate actions.`,
+            modelPerformance: `The ML alpha model generates information ratio of 1.8 with Sharpe ratio of 2.3—significantly exceeding the 0.9 IR of traditional factor models. Execution optimization reduces market impact by 34%, saving $12 million annually in transaction costs. Risk models predict 95% of tail losses exceeding 2% of portfolio value.
+
+Out-of-sample backtesting shows consistent performance across market regimes with maximum drawdown of 8.2% versus 14.7% for the previous strategy. Alpha decay is monitored continuously with models retrained monthly. Transaction cost analysis confirms execution improvements translate to net performance gains.`,
+            implementationStrategy: `Deployment used paper trading for 6 months to validate model performance without capital risk. Gradual capital allocation increased from 10% to 100% of strategy allocation over 4 months. Risk limits were conservative initially, expanding as track record developed.
+
+Infrastructure investment included co-location, FPGA acceleration for critical paths, and redundant systems for disaster recovery. Compliance integration ensures all trading activity is logged and auditable. Performance attribution tracks contribution of each signal source.`,
+            businessImpact: `Net alpha increased by 340 basis points annually, generating $81 million incremental return on the $2.4 billion book. Transaction cost savings of $12 million annually improved net performance. Risk-adjusted returns improved with Sharpe ratio increasing from 1.4 to 2.3.
+
+The platform enabled expansion into new markets and strategies with proven infrastructure and methodology. Investor interest increased with improved track record, enabling $800 million in new capital raising. The ML capabilities became a key differentiator in fund marketing.`,
+            lessonsLearned: `Overfitting was the primary risk—extensive out-of-sample testing and paper trading were essential before live deployment. Feature engineering mattered more than model complexity—well-designed features with simple models outperformed complex models on raw data. Execution optimization provided significant value often overlooked in trading system design.
+
+We learned that regime changes could rapidly degrade model performance—continuous monitoring and rapid model updates were essential. Alternative data sources provided alpha but required significant data engineering investment. The combination of ML with traditional quantitative methods proved more robust than either alone.`
+        };
+
+        caseStudies[18] = {
+            subtitle: 'Computer Vision',
+            title: 'Autonomous Vehicle Perception',
+            executiveSummary: `An autonomous vehicle startup needed to develop perception capabilities for urban self-driving. This project delivered a comprehensive perception stack that detects, tracks, and predicts the behavior of all relevant objects in complex urban environments.
+
+The solution fuses data from multiple sensors (cameras, LiDAR, radar) to create a unified understanding of the vehicle's surroundings. Deep learning models handle object detection, semantic segmentation, and motion forecasting with the reliability required for safety-critical operation.`,
+            businessProblem: `Urban autonomous driving presents extreme perception challenges: diverse object types (vehicles, pedestrians, cyclists, animals), complex interactions at intersections, adverse weather conditions, and unexpected behaviors. The perception system must achieve near-perfect reliability—any missed detection could result in accidents.
+
+The challenge was sensor fusion—combining complementary sensor modalities to overcome individual sensor limitations. Real-time performance was essential—perception latency directly impacts vehicle stopping distance. The system must operate across diverse geographic and weather conditions.`,
+            technicalArchitecture: `The perception stack uses a multi-sensor fusion architecture. Camera data feeds 2D object detection and semantic segmentation using YOLO and DeepLab architectures. LiDAR provides 3D point cloud processing for precise spatial localization. Radar contributes velocity measurements and all-weather reliability.
+
+Sensor fusion combines detections in a bird's-eye view representation using learned attention mechanisms. Tracking uses multi-hypothesis approaches to maintain identity through occlusions. Motion forecasting predicts future trajectories using social attention models that consider interactions between agents.`,
+            dataStrategy: `Training data includes 12 million miles of driving data with manual annotation of 4.2 billion objects. Data collection covers diverse conditions: day/night, sun/rain/snow, urban/suburban/highway, and different geographic regions. Simulation generates additional training data for rare scenarios.
+
+Annotation includes 3D bounding boxes, instance segmentation, tracking IDs, and behavioral labels. Active learning prioritizes scenarios where current models are uncertain. Data augmentation includes synthetic weather effects, lighting variations, and object occlusions.`,
+            modelPerformance: `Object detection achieves 99.7% recall for vehicles and 98.2% for pedestrians at 0.1 false positives per frame. 3D localization accuracy is ±8cm for vehicles and ±12cm for pedestrians. Tracking maintains 97% ID consistency through 10-second occlusions.
+
+Motion forecasting achieves 0.45m average displacement error at 3-second horizon for vehicles and 0.62m for pedestrians. Inference latency is 45ms end-to-end on vehicle compute hardware. The system operates reliably in rain and light snow, with graceful degradation in heavy precipitation.`,
+            implementationStrategy: `Development followed iterative improvement with extensive simulation testing before on-road deployment. Shadow mode operation logged perception outputs without vehicle control for validation. Gradual expansion from highway to suburban to urban environments as capabilities matured.
+
+Safety validation included 2.4 million simulation miles and 180,000 real-world test miles before public road testing. Redundant systems ensure safe fallback if perception degrades. Continuous data collection from the fleet enables ongoing model improvement.`,
+            businessImpact: `The perception stack enabled demonstration of fully autonomous operation in complex urban environments—a key milestone for investor confidence and regulatory approval. Safety metrics exceeded human driver performance with 10x lower collision rate in testing.
+
+The technology attracted $340 million in Series C funding at increased valuation. Partnership discussions with major automakers advanced to technical due diligence. The perception capabilities became a core IP asset with 47 patents filed.`,
+            lessonsLearned: `Sensor fusion was essential—no single sensor modality was sufficient for all conditions. Camera-based detection excelled at object classification but struggled with depth. LiDAR provided precise ranging but was sensitive to weather. The combination achieved robustness neither could achieve alone.
+
+We learned that data diversity mattered more than data volume—models trained on geographically diverse data generalized better. Edge cases and rare scenarios required targeted data collection rather than hoping for random coverage. The long tail of unusual situations was the hardest part of the problem.`
+        };
+
+        caseStudies[19] = {
+            subtitle: 'Deep Learning',
+            title: 'Speech Recognition Pipeline',
+            executiveSummary: `A customer service organization handling 45 million calls annually needed to improve speech recognition accuracy for call transcription and analysis. This project delivered an enterprise speech recognition platform optimized for conversational telephone speech with domain adaptation for customer service vocabulary.
+
+The solution combines acoustic modeling, language modeling, and speaker diarization to produce accurate transcripts suitable for quality assurance, compliance monitoring, and analytics. Real-time processing enables live agent assistance applications alongside batch transcription for post-call analysis.`,
+            businessProblem: `The legacy speech recognition system achieved only 78% word accuracy on customer service calls—insufficient for automated analysis. Accent diversity, background noise, and conversational speech patterns (disfluencies, interruptions) degraded performance. Transcription costs of $4.2 million annually limited the volume of calls that could be analyzed.
+
+The challenge was conversational speech—unlike read speech or broadcast audio, customer service calls include spontaneous speech with hesitations, false starts, overlapping speech, and emotional expression. Domain-specific vocabulary (product names, technical terms) was poorly recognized by general-purpose models.`,
+            technicalArchitecture: `The pipeline uses a hybrid architecture: a Conformer-based acoustic model processes audio spectrograms, a Transformer language model captures linguistic structure, and a WFST decoder combines acoustic and language model scores. Speaker diarization uses embedding-based clustering to identify different speakers.
+
+Training uses 87,000 hours of labeled speech data. Domain adaptation fine-tunes models on customer service transcripts. Real-time processing uses model quantization and ONNX Runtime for efficient inference. Batch processing handles large transcription volumes with auto-scaling compute resources.`,
+            dataStrategy: `Training data combines publicly available speech corpora (LibriSpeech, Switchboard) with 45,000 hours of customer service calls transcribed by human annotators. Data augmentation includes speed perturbation, volume variation, background noise addition, and reverberation simulation.
+
+Language model training uses both general text (web crawl, books) and domain-specific text (call transcripts, product documentation, FAQ content). Vocabulary customization includes product names, competitor names, and industry terminology. Pronunciation dictionaries handle proper nouns and abbreviations.`,
+            modelPerformance: `The speech recognition system achieves 94.2% word accuracy on customer service calls—a 21% improvement over the legacy system. Speaker diarization correctly identifies speaker changes with 96% accuracy. Real-time latency is 280ms for streaming transcription.
+
+Per-condition accuracy: clean speech (96.8%), moderate noise (93.4%), strong accent (89.2%), overlapping speech (84.7%). Domain-specific vocabulary recognition improved 34% through fine-tuning. Named entity recognition from transcripts achieves 91% F1-score for product mentions.`,
+            implementationStrategy: `Deployment replaced the legacy transcription service through a phased rollout. Initial deployment handled 10% of call volume with parallel operation for accuracy validation. Gradual expansion reached 100% coverage over 5 months. Real-time transcription for agent assistance launched as a separate application.
+
+Integration with call recording systems required API development for audio retrieval. Quality monitoring dashboards track transcription accuracy and system performance. Human review of low-confidence segments provides ongoing training data.`,
+            businessImpact: `Transcription accuracy improvement enabled automated quality assurance covering 100% of calls versus 5% previously. Compliance monitoring automation saved $2.8 million annually in manual review costs. Customer analytics from transcripts identified $12 million in upsell opportunities.
+
+Real-time transcription for agent assistance reduced average handle time by 12% through automated information lookup and suggested responses. Customer satisfaction improved 8 points as agents had better information availability. The speech platform became foundational for voice-based AI assistant development.`,
+            lessonsLearned: `Domain adaptation was essential—general-purpose speech models performed poorly on customer service vocabulary. Data augmentation significantly improved robustness to noise and accents at minimal cost. Speaker diarization accuracy was critical for analytics applications requiring speaker attribution.
+
+We learned that word error rate didn't fully capture transcription utility—some errors mattered more than others. Custom evaluation metrics weighted important terms (product names, numbers) higher. Continuous model updates were necessary as products and vocabulary evolved.`
+        };
+
+        caseStudies[20] = {
+            subtitle: 'Cybersecurity',
+            title: 'Cybersecurity Threat Detection',
+            executiveSummary: `A financial services company with $890 billion in assets under management faced sophisticated cyber threats targeting customer data and financial systems. This project delivered an AI-powered security operations platform that detects advanced persistent threats, insider threats, and anomalous behavior across the enterprise.
+
+The solution combines network traffic analysis, endpoint behavior monitoring, and user activity analytics to identify threats that evade signature-based detection. Machine learning models establish baselines of normal behavior and flag deviations indicating potential compromise or malicious activity.`,
+            businessProblem: `Traditional rule-based security tools generated 12,000 alerts daily—overwhelming the security operations team and causing critical alerts to be missed. Advanced threats often dwell in networks for months before detection. Insider threats were particularly challenging, with authorized users potentially abusing their access.
+
+The challenge was the adversarial nature of security—attackers actively evade detection and modify tactics. Normal behavior varies dramatically across users, systems, and business processes. False positives must be minimized to maintain analyst trust and operational efficiency.`,
+            technicalArchitecture: `The platform uses a security data lake architecture: data collection from network sensors (Zeek, Suricata), endpoint agents (EDR), and identity systems (Active Directory, SSO). Stream processing (Apache Flink) enriches events with threat intelligence and contextual data. Detection uses multiple ML approaches: anomaly detection, graph analysis, and supervised classifiers.
+
+The detection layer includes network anomaly detection (autoencoders on traffic patterns), user behavior analytics (clustering and sequence analysis), and entity relationship analysis (graph neural networks for lateral movement detection). A case management system correlates alerts and supports investigation workflows.`,
+            dataStrategy: `Data sources include network flow records (2.3 billion daily), endpoint telemetry (process execution, file access, registry changes), authentication logs (450 million daily), and proxy logs (780 million daily). Historical data spans 2 years enabling baseline establishment and threat hunting.
+
+Feature engineering creates behavioral profiles for users, systems, and network segments. Anomaly detection uses isolation forests and LSTM autoencoders trained only on benign activity. Graph analysis identifies unusual connection patterns indicative of lateral movement. Supervised models detect known attack techniques using labeled threat intelligence.`,
+            modelPerformance: `The threat detection system identifies 94% of simulated advanced persistent threats with median detection time of 4.2 hours—compared to 187 days industry average dwell time. Insider threat detection achieves 87% precision with 2.3% false positive rate. Network anomaly detection flags 0.08% of traffic for analyst review.
+
+Alert volume decreased from 12,000 daily to 340 high-fidelity alerts after ML filtering. Mean time to detect (MTTD) improved from 197 days to 8 hours for targeted attacks. Mean time to respond (MTTR) decreased from 45 days to 3 days with automated case enrichment.`,
+            implementationStrategy: `Deployment used a shadow mode where ML detections were logged but not alerted for 3 months to validate accuracy. Gradual rollout enabled detection categories one at a time with analyst feedback. Integration with SOAR (Security Orchestration, Automation and Response) enabled automated response for high-confidence detections.
+
+Security operations center (SOC) analysts received training on ML-generated alerts and investigation workflows. Threat hunting teams used the platform for proactive threat identification. Red team exercises validated detection capabilities against simulated attacks.`,
+            businessImpact: `The threat detection platform prevented an estimated $45 million in potential breach costs through early threat identification. SOC operational efficiency improved 8x with analyst capacity reallocated from alert triage to proactive hunting. Regulatory examinations praised the advanced threat detection capabilities.
+
+The platform detected 3 active threats that had evaded traditional controls for months, enabling remediation before data exfiltration. Cyber insurance premiums decreased 15% due to improved security posture. Board confidence in security operations increased with improved metrics and visibility.`,
+            lessonsLearned: `Behavioral baselines were essential for detecting novel threats—signature-based approaches missed zero-day attacks. The combination of multiple detection approaches (network, endpoint, user) provided defense in depth with each catching threats others missed. Explainability was critical for analyst adoption—alerts needed context for effective investigation.
+
+We learned that continuous adaptation was necessary—attackers evolved tactics and baselines drifted as business operations changed. The human-in-the-loop approach, where analysts provided feedback on alert quality, continuously improved model performance. Integration with response automation was essential for realizing the full value of rapid detection.`
+        };
+
+        // Projects Data
+        const projects = [
+            {
+                id: 1,
+                title: 'Credit Risk Scoring Engine',
+                subtitle: 'Machine Learning',
+                description: 'End-to-end credit risk models using logistic regression, WOE binning, and IV analysis to predict default probability and minimize portfolio risk.',
+                tags: ['Logistic Regression', 'WOE', 'IV', 'Gini', 'SHAP'],
+                layout: 'hierarchical',
+                nodes: [
+                    { id: 1, label: 'Credit\nEngine', group: 'central', x: 50, y: 15 },
+                    { id: 2, label: 'Logistic\nRegression', group: 'concept', x: 25, y: 40 },
+                    { id: 3, label: 'WOE', group: 'concept', x: 50, y: 40 },
+                    { id: 4, label: 'IV', group: 'concept', x: 75, y: 40 },
+                    { id: 5, label: 'Gini', group: 'concept', x: 30, y: 65 },
+                    { id: 6, label: 'SHAP', group: 'concept', x: 70, y: 65 },
+                    { id: 7, label: 'Python', group: 'tool', x: 25, y: 85 },
+                    { id: 8, label: 'Scikit-learn', group: 'tool', x: 75, y: 85 },
+                ],
+                edges: [
+                    { from: 1, to: 2, label: 'uses' },
+                    { from: 2, to: 3, label: 'requires' },
+                    { from: 3, to: 4, label: 'calculates' },
+                    { from: 5, to: 1, label: 'measures' },
+                    { from: 6, to: 1, label: 'explains' },
+                    { from: 7, to: 1, label: 'powers' },
+                    { from: 8, to: 2, label: 'implements' },
+                ]
+            },
+            {
+                id: 2,
+                title: 'Customer Churn Forecaster',
+                subtitle: 'Survival Analysis',
+                description: 'Survival analysis and gradient-boosted models that predict when users are likely to leave—and what actions can keep them.',
+                tags: ['Survival Analysis', 'XGBoost', 'SMOTE', 'CLV'],
+                layout: 'radial',
+                nodes: [
+                    { id: 1, label: 'Churn\nPredictor', group: 'central', x: 50, y: 50 },
+                    { id: 2, label: 'Survival\nAnalysis', group: 'concept', x: 50, y: 20 },
+                    { id: 3, label: 'XGBoost', group: 'concept', x: 78, y: 35 },
+                    { id: 4, label: 'SMOTE', group: 'concept', x: 78, y: 65 },
+                    { id: 5, label: 'CLV', group: 'concept', x: 50, y: 80 },
+                    { id: 6, label: 'Cox\nHazards', group: 'concept', x: 22, y: 65 },
+                    { id: 7, label: 'Python', group: 'tool', x: 22, y: 35 },
+                    { id: 8, label: 'Lifelines', group: 'tool', x: 85, y: 50 },
+                ],
+                edges: [
+                    { from: 1, to: 2, label: 'models' },
+                    { from: 1, to: 3, label: 'predicts' },
+                    { from: 4, to: 1, label: 'balances' },
+                    { from: 1, to: 5, label: 'calculates' },
+                    { from: 6, to: 2, label: 'applies' },
+                    { from: 7, to: 1, label: 'powers' },
+                    { from: 8, to: 2, label: 'implements' },
+                ]
+            },
+            {
+                id: 3,
+                title: 'Geospatial Site Selector',
+                subtitle: 'Location Intelligence',
+                description: 'Demographic clustering and gravity models that recommend optimal locations based on population flow and competition density.',
+                tags: ['Geospatial', 'Clustering', 'Optimization', 'Huff Model'],
+                layout: 'force',
+                nodes: [
+                    { id: 1, label: 'Site\nSelector', group: 'central', x: 50, y: 50 },
+                    { id: 2, label: 'K-Means', group: 'concept', x: 25, y: 30 },
+                    { id: 3, label: 'Huff\nModel', group: 'concept', x: 75, y: 30 },
+                    { id: 4, label: 'Census\nData', group: 'concept', x: 25, y: 70 },
+                    { id: 5, label: 'Linear\nProgramming', group: 'concept', x: 75, y: 70 },
+                    { id: 6, label: 'Catchment\nArea', group: 'concept', x: 50, y: 20 },
+                    { id: 7, label: 'GeoPandas', group: 'tool', x: 15, y: 85 },
+                    { id: 8, label: 'Uber H3', group: 'tool', x: 85, y: 85 },
+                ],
+                edges: [
+                    { from: 1, to: 2, label: 'clusters' },
+                    { from: 1, to: 3, label: 'applies' },
+                    { from: 4, to: 2, label: 'feeds' },
+                    { from: 5, to: 1, label: 'optimizes' },
+                    { from: 3, to: 6, label: 'calculates' },
+                    { from: 7, to: 1, label: 'powers' },
+                    { from: 8, to: 4, label: 'indexes' },
+                ]
+            },
+            {
+                id: 4,
+                title: 'Product Recommendation Engine',
+                subtitle: 'Collaborative Filtering',
+                description: 'Matrix factorization and collaborative filtering that connects users with products they will love—solving the cold-start problem.',
+                tags: ['Collaborative Filtering', 'Matrix Factorization', 'Cold Start'],
+                layout: 'bipartite',
+                nodes: [
+                    { id: 1, label: 'RecSys\nEngine', group: 'central', x: 50, y: 50 },
+                    { id: 2, label: 'Matrix\nFactorization', group: 'concept', x: 25, y: 30 },
+                    { id: 3, label: 'Cold\nStart', group: 'concept', x: 75, y: 30 },
+                    { id: 4, label: 'Implicit\nFeedback', group: 'concept', x: 25, y: 70 },
+                    { id: 5, label: 'Cosine\nSimilarity', group: 'concept', x: 75, y: 70 },
+                    { id: 6, label: 'ALS', group: 'concept', x: 50, y: 20 },
+                    { id: 7, label: 'Spark', group: 'tool', x: 15, y: 85 },
+                    { id: 8, label: 'FAISS', group: 'tool', x: 85, y: 85 },
+                ],
+                edges: [
+                    { from: 1, to: 2, label: 'uses' },
+                    { from: 1, to: 3, label: 'solves' },
+                    { from: 4, to: 2, label: 'provides' },
+                    { from: 5, to: 1, label: 'measures' },
+                    { from: 6, to: 2, label: 'optimizes' },
+                    { from: 7, to: 1, label: 'scales' },
+                    { from: 8, to: 1, label: 'retrieves' },
+                ]
+            },
+            {
+                id: 5,
+                title: 'Sentiment Analysis Pipeline',
+                subtitle: 'Natural Language Processing',
+                description: 'BERT-based sentiment classification and aspect extraction that turns millions of reviews into actionable product insights.',
+                tags: ['BERT', 'NLP', 'Aspect Extraction', 'Transformers'],
+                layout: 'hierarchical',
+                nodes: [
+                    { id: 1, label: 'Sentiment\nPipeline', group: 'central', x: 50, y: 15 },
+                    { id: 2, label: 'BERT', group: 'concept', x: 30, y: 40 },
+                    { id: 3, label: 'Aspect\nExtraction', group: 'concept', x: 70, y: 40 },
+                    { id: 4, label: 'Tokenization', group: 'concept', x: 20, y: 65 },
+                    { id: 5, label: 'NER', group: 'concept', x: 50, y: 65 },
+                    { id: 6, label: 'Classification', group: 'concept', x: 80, y: 65 },
+                    { id: 7, label: 'HuggingFace', group: 'tool', x: 25, y: 85 },
+                    { id: 8, label: 'spaCy', group: 'tool', x: 75, y: 85 },
+                ],
+                edges: [
+                    { from: 1, to: 2, label: 'encodes' },
+                    { from: 1, to: 3, label: 'extracts' },
+                    { from: 4, to: 2, label: 'prepares' },
+                    { from: 5, to: 3, label: 'identifies' },
+                    { from: 6, to: 1, label: 'labels' },
+                    { from: 7, to: 2, label: 'provides' },
+                    { from: 8, to: 3, label: 'implements' },
+                ]
+            },
+            {
+                id: 6,
+                title: 'Visual Quality Inspector',
+                subtitle: 'Computer Vision',
+                description: 'Deep learning defect detection for manufacturing that inspects products at line speed with superhuman accuracy.',
+                tags: ['CNN', 'YOLO', 'Defect Detection', 'Edge AI'],
+                layout: 'radial',
+                nodes: [
+                    { id: 1, label: 'Quality\nInspector', group: 'central', x: 50, y: 50 },
+                    { id: 2, label: 'YOLOv8', group: 'concept', x: 50, y: 20 },
+                    { id: 3, label: 'CNN', group: 'concept', x: 78, y: 35 },
+                    { id: 4, label: 'Defect\nDetection', group: 'concept', x: 78, y: 65 },
+                    { id: 5, label: 'Edge\nInference', group: 'concept', x: 50, y: 80 },
+                    { id: 6, label: 'Image\nAugmentation', group: 'concept', x: 22, y: 65 },
+                    { id: 7, label: 'PyTorch', group: 'tool', x: 22, y: 35 },
+                    { id: 8, label: 'TensorRT', group: 'tool', x: 85, y: 50 },
+                ],
+                edges: [
+                    { from: 1, to: 2, label: 'detects' },
+                    { from: 3, to: 2, label: 'powers' },
+                    { from: 2, to: 4, label: 'finds' },
+                    { from: 5, to: 1, label: 'enables' },
+                    { from: 6, to: 3, label: 'augments' },
+                    { from: 7, to: 3, label: 'trains' },
+                    { from: 8, to: 5, label: 'optimizes' },
+                ]
+            },
+            {
+                id: 7,
+                title: 'Demand Forecasting System',
+                subtitle: 'Time Series Forecasting',
+                description: 'Multi-horizon demand forecasting that optimizes inventory, production planning, and promotional execution.',
+                tags: ['Prophet', 'LightGBM', 'DeepAR', 'Hierarchical'],
+                layout: 'force',
+                nodes: [
+                    { id: 1, label: 'Demand\nForecaster', group: 'central', x: 50, y: 50 },
+                    { id: 2, label: 'Prophet', group: 'concept', x: 25, y: 30 },
+                    { id: 3, label: 'LightGBM', group: 'concept', x: 75, y: 30 },
+                    { id: 4, label: 'DeepAR', group: 'concept', x: 25, y: 70 },
+                    { id: 5, label: 'Hierarchical\nReconciliation', group: 'concept', x: 75, y: 70 },
+                    { id: 6, label: 'Seasonality', group: 'concept', x: 50, y: 20 },
+                    { id: 7, label: 'Pandas', group: 'tool', x: 15, y: 85 },
+                    { id: 8, label: 'GluonTS', group: 'tool', x: 85, y: 85 },
+                ],
+                edges: [
+                    { from: 1, to: 2, label: 'decomposes' },
+                    { from: 1, to: 3, label: 'boosts' },
+                    { from: 4, to: 1, label: 'probabilizes' },
+                    { from: 5, to: 1, label: 'reconciles' },
+                    { from: 6, to: 2, label: 'models' },
+                    { from: 7, to: 1, label: 'processes' },
+                    { from: 8, to: 4, label: 'implements' },
+                ]
+            },
+            {
+                id: 8,
+                title: 'Fraud Detection Network',
+                subtitle: 'Deep Learning',
+                description: 'Real-time fraud detection using graph neural networks to identify anomalous patterns and coordinated attacks.',
+                tags: ['Graph Neural Networks', 'GraphSAGE', 'Anomaly Detection'],
+                layout: 'bipartite',
+                nodes: [
+                    { id: 1, label: 'Fraud\nDetector', group: 'central', x: 50, y: 50 },
+                    { id: 2, label: 'GraphSAGE', group: 'concept', x: 25, y: 30 },
+                    { id: 3, label: 'Entity\nEmbeddings', group: 'concept', x: 75, y: 30 },
+                    { id: 4, label: 'Transaction\nGraph', group: 'concept', x: 25, y: 70 },
+                    { id: 5, label: 'Anomaly\nScore', group: 'concept', x: 75, y: 70 },
+                    { id: 6, label: 'Lateral\nMovement', group: 'concept', x: 50, y: 20 },
+                    { id: 7, label: 'PyTorch\nGeometric', group: 'tool', x: 15, y: 85 },
+                    { id: 8, label: 'Neo4j', group: 'tool', x: 85, y: 85 },
+                ],
+                edges: [
+                    { from: 1, to: 2, label: 'learns' },
+                    { from: 2, to: 3, label: 'generates' },
+                    { from: 4, to: 2, label: 'feeds' },
+                    { from: 3, to: 5, label: 'produces' },
+                    { from: 6, to: 1, label: 'detects' },
+                    { from: 7, to: 2, label: 'trains' },
+                    { from: 8, to: 4, label: 'stores' },
+                ]
+            },
+            {
+                id: 9,
+                title: 'IoT Anomaly Detector',
+                subtitle: 'Anomaly Detection',
+                description: 'Sensor-based anomaly detection that predicts equipment failures before they occur, enabling predictive maintenance.',
+                tags: ['Isolation Forest', 'LSTM', 'Time Series', 'Edge AI'],
+                layout: 'hierarchical',
+                nodes: [
+                    { id: 1, label: 'IoT\nAnomaly\nDetector', group: 'central', x: 50, y: 15 },
+                    { id: 2, label: 'Isolation\nForest', group: 'concept', x: 25, y: 40 },
+                    { id: 3, label: 'LSTM\nAutoencoder', group: 'concept', x: 75, y: 40 },
+                    { id: 4, label: 'Sensor\nFusion', group: 'concept', x: 20, y: 65 },
+                    { id: 5, label: 'Vibration\nAnalysis', group: 'concept', x: 50, y: 65 },
+                    { id: 6, label: 'Thermal\nImaging', group: 'concept', x: 80, y: 65 },
+                    { id: 7, label: 'TensorFlow', group: 'tool', x: 25, y: 85 },
+                    { id: 8, label: 'MQTT', group: 'tool', x: 75, y: 85 },
+                ],
+                edges: [
+                    { from: 1, to: 2, label: 'detects' },
+                    { from: 1, to: 3, label: 'encodes' },
+                    { from: 4, to: 1, label: 'combines' },
+                    { from: 5, to: 2, label: 'analyzes' },
+                    { from: 6, to: 3, label: 'images' },
+                    { from: 7, to: 3, label: 'trains' },
+                    { from: 8, to: 1, label: 'streams' },
+                ]
+            },
+            {
+                id: 10,
+                title: 'Dynamic Pricing Optimizer',
+                subtitle: 'Reinforcement Learning',
+                description: 'Reinforcement learning system that adjusts prices in real-time based on demand patterns and competitive positioning.',
+                tags: ['Reinforcement Learning', 'Contextual Bandits', 'Thompson Sampling'],
+                layout: 'radial',
+                nodes: [
+                    { id: 1, label: 'Pricing\nOptimizer', group: 'central', x: 50, y: 50 },
+                    { id: 2, label: 'Contextual\nBandit', group: 'concept', x: 50, y: 20 },
+                    { id: 3, label: 'Thompson\nSampling', group: 'concept', x: 78, y: 35 },
+                    { id: 4, label: 'Revenue\nMaximization', group: 'concept', x: 78, y: 65 },
+                    { id: 5, label: 'Demand\nModeling', group: 'concept', x: 50, y: 80 },
+                    { id: 6, label: 'A/B\nTesting', group: 'concept', x: 22, y: 65 },
+                    { id: 7, label: 'Vowpal\nWabbit', group: 'tool', x: 22, y: 35 },
+                    { id: 8, label: 'Simulation', group: 'tool', x: 85, y: 50 },
+                ],
+                edges: [
+                    { from: 1, to: 2, label: 'uses' },
+                    { from: 2, to: 3, label: 'explores' },
+                    { from: 1, to: 4, label: 'optimizes' },
+                    { from: 5, to: 1, label: 'predicts' },
+                    { from: 6, to: 2, label: 'validates' },
+                    { from: 7, to: 2, label: 'implements' },
+                    { from: 8, to: 1, label: 'tests' },
+                ]
+            },
+            {
+                id: 11,
+                title: 'Predictive Maintenance Suite',
+                subtitle: 'Predictive Maintenance',
+                description: 'Unified platform for predicting equipment failures across diverse industrial assets using vibration, thermal, and operational data.',
+                tags: ['Vibration Analysis', 'Thermal Imaging', 'Oil Analysis'],
+                layout: 'force',
+                nodes: [
+                    { id: 1, label: 'Maintenance\nSuite', group: 'central', x: 50, y: 50 },
+                    { id: 2, label: 'Vibration', group: 'concept', x: 25, y: 30 },
+                    { id: 3, label: 'Thermal', group: 'concept', x: 75, y: 30 },
+                    { id: 4, label: 'Oil\nAnalysis', group: 'concept', x: 25, y: 70 },
+                    { id: 5, label: 'SCADA', group: 'concept', x: 75, y: 70 },
+                    { id: 6, label: 'RUL\nPrediction', group: 'concept', x: 50, y: 20 },
+                    { id: 7, label: 'FFT', group: 'tool', x: 15, y: 85 },
+                    { id: 8, label: 'Wavelets', group: 'tool', x: 85, y: 85 },
+                ],
+                edges: [
+                    { from: 1, to: 2, label: 'monitors' },
+                    { from: 1, to: 3, label: 'images' },
+                    { from: 4, to: 1, label: 'analyzes' },
+                    { from: 5, to: 1, label: 'streams' },
+                    { from: 6, to: 1, label: 'predicts' },
+                    { from: 7, to: 2, label: 'transforms' },
+                    { from: 8, to: 2, label: 'decomposes' },
+                ]
+            },
+            {
+                id: 12,
+                title: 'Customer Segmentation Engine',
+                subtitle: 'Clustering & Segmentation',
+                description: 'Behavior-based customer segmentation using ensemble clustering to identify actionable personas for marketing and product development.',
+                tags: ['K-Means', 'DBSCAN', 'Hierarchical', 'Ensemble'],
+                layout: 'bipartite',
+                nodes: [
+                    { id: 1, label: 'Segmentation\nEngine', group: 'central', x: 50, y: 50 },
+                    { id: 2, label: 'K-Means', group: 'concept', x: 25, y: 30 },
+                    { id: 3, label: 'DBSCAN', group: 'concept', x: 75, y: 30 },
+                    { id: 4, label: 'Hierarchical', group: 'concept', x: 25, y: 70 },
+                    { id: 5, label: 'Ensemble', group: 'concept', x: 75, y: 70 },
+                    { id: 6, label: 'Personas', group: 'concept', x: 50, y: 20 },
+                    { id: 7, label: 'sklearn', group: 'tool', x: 15, y: 85 },
+                    { id: 8, label: 'PCA', group: 'tool', x: 85, y: 85 },
+                ],
+                edges: [
+                    { from: 1, to: 2, label: 'partitions' },
+                    { from: 1, to: 3, label: 'discovers' },
+                    { from: 4, to: 1, label: 'merges' },
+                    { from: 5, to: 1, label: 'stabilizes' },
+                    { from: 6, to: 1, label: 'defines' },
+                    { from: 7, to: 2, label: 'implements' },
+                    { from: 8, to: 5, label: 'reduces' },
+                ]
+            },
+            {
+                id: 13,
+                title: 'Intelligent Document Processor',
+                subtitle: 'Natural Language Processing',
+                description: 'OCR and NLP pipeline that extracts structured data from unstructured documents with human-level accuracy.',
+                tags: ['OCR', 'BERT', 'Layout Analysis', 'Entity Extraction'],
+                layout: 'hierarchical',
+                nodes: [
+                    { id: 1, label: 'Document\nProcessor', group: 'central', x: 50, y: 15 },
+                    { id: 2, label: 'OCR', group: 'concept', x: 25, y: 40 },
+                    { id: 3, label: 'Layout\nAnalysis', group: 'concept', x: 75, y: 40 },
+                    { id: 4, label: 'NER', group: 'concept', x: 20, y: 65 },
+                    { id: 5, label: 'Table\nExtraction', group: 'concept', x: 50, y: 65 },
+                    { id: 6, label: 'Validation', group: 'concept', x: 80, y: 65 },
+                    { id: 7, label: 'Tesseract', group: 'tool', x: 25, y: 85 },
+                    { id: 8, label: 'Detectron2', group: 'tool', x: 75, y: 85 },
+                ],
+                edges: [
+                    { from: 1, to: 2, label: 'reads' },
+                    { from: 1, to: 3, label: 'structures' },
+                    { from: 4, to: 1, label: 'extracts' },
+                    { from: 5, to: 1, label: 'parses' },
+                    { from: 6, to: 1, label: 'verifies' },
+                    { from: 7, to: 2, label: 'recognizes' },
+                    { from: 8, to: 3, label: 'detects' },
+                ]
+            },
+            {
+                id: 14,
+                title: 'Route Optimization Engine',
+                subtitle: 'Optimization',
+                description: 'VRPTW solver that minimizes drive time while respecting delivery windows, vehicle constraints, and driver preferences.',
+                tags: ['VRPTW', 'OR-Tools', 'Heuristics', 'Metaheuristics'],
+                layout: 'radial',
+                nodes: [
+                    { id: 1, label: 'Route\nOptimizer', group: 'central', x: 50, y: 50 },
+                    { id: 2, label: 'VRPTW', group: 'concept', x: 50, y: 20 },
+                    { id: 3, label: 'OR-Tools', group: 'concept', x: 78, y: 35 },
+                    { id: 4, label: 'Simulated\nAnnealing', group: 'concept', x: 78, y: 65 },
+                    { id: 5, label: 'Constraint\nProgramming', group: 'concept', x: 50, y: 80 },
+                    { id: 6, label: 'Traffic\nIntegration', group: 'concept', x: 22, y: 65 },
+                    { id: 7, label: 'Google Maps', group: 'tool', x: 22, y: 35 },
+                    { id: 8, label: 'Gurobi', group: 'tool', x: 85, y: 50 },
+                ],
+                edges: [
+                    { from: 1, to: 2, label: 'solves' },
+                    { from: 3, to: 1, label: 'optimizes' },
+                    { from: 4, to: 1, label: 'improves' },
+                    { from: 5, to: 1, label: 'constrains' },
+                    { from: 6, to: 1, label: 'adjusts' },
+                    { from: 7, to: 6, label: 'provides' },
+                    { from: 8, to: 3, label: 'accelerates' },
+                ]
+            },
+            {
+                id: 15,
+                title: 'Supply Chain Optimizer',
+                subtitle: 'Supply Chain',
+                description: 'End-to-end supply chain optimization integrating demand forecasting, inventory optimization, and distribution planning.',
+                tags: ['Stochastic Programming', 'Network Flow', 'Multi-Echelon'],
+                layout: 'force',
+                nodes: [
+                    { id: 1, label: 'Supply Chain\nOptimizer', group: 'central', x: 50, y: 50 },
+                    { id: 2, label: 'Demand\nForecasting', group: 'concept', x: 25, y: 30 },
+                    { id: 3, label: 'Inventory\nOptimization', group: 'concept', x: 75, y: 30 },
+                    { id: 4, label: 'Distribution\nPlanning', group: 'concept', x: 25, y: 70 },
+                    { id: 5, label: 'Production\nScheduling', group: 'concept', x: 75, y: 70 },
+                    { id: 6, label: 'Safety\nStock', group: 'concept', x: 50, y: 20 },
+                    { id: 7, label: 'Pyomo', group: 'tool', x: 15, y: 85 },
+                    { id: 8, label: 'Gurobi', group: 'tool', x: 85, y: 85 },
+                ],
+                edges: [
+                    { from: 1, to: 2, label: 'forecasts' },
+                    { from: 1, to: 3, label: 'optimizes' },
+                    { from: 4, to: 1, label: 'plans' },
+                    { from: 5, to: 1, label: 'schedules' },
+                    { from: 6, to: 3, label: 'buffers' },
+                    { from: 7, to: 1, label: 'models' },
+                    { from: 8, to: 1, label: 'solves' },
+                ]
+            },
+            {
+                id: 16,
+                title: 'Healthcare AI Diagnostics',
+                subtitle: 'Healthcare AI',
+                description: 'Multi-modal diagnostic assistance platform analyzing medical imaging, lab results, and clinical notes for improved patient outcomes.',
+                tags: ['Medical Imaging', 'Clinical NLP', 'FHIR', 'FDA'],
+                layout: 'bipartite',
+                nodes: [
+                    { id: 1, label: 'Healthcare\nAI', group: 'central', x: 50, y: 50 },
+                    { id: 2, label: 'Radiology\nCNN', group: 'concept', x: 25, y: 30 },
+                    { id: 3, label: 'Pathology\nAnalysis', group: 'concept', x: 75, y: 30 },
+                    { id: 4, label: 'Clinical\nNLP', group: 'concept', x: 25, y: 70 },
+                    { id: 5, label: 'ECG\nInterpretation', group: 'concept', x: 75, y: 70 },
+                    { id: 6, label: 'FHIR\nIntegration', group: 'concept', x: 50, y: 20 },
+                    { id: 7, label: 'MONAI', group: 'tool', x: 15, y: 85 },
+                    { id: 8, label: 'Epic', group: 'tool', x: 85, y: 85 },
+                ],
+                edges: [
+                    { from: 1, to: 2, label: 'images' },
+                    { from: 1, to: 3, label: 'screens' },
+                    { from: 4, to: 1, label: 'extracts' },
+                    { from: 5, to: 1, label: 'monitors' },
+                    { from: 6, to: 1, label: 'integrates' },
+                    { from: 7, to: 2, label: 'processes' },
+                    { from: 8, to: 6, label: 'provides' },
+                ]
+            },
+            {
+                id: 17,
+                title: 'Algorithmic Trading System',
+                subtitle: 'FinTech',
+                description: 'ML-powered trading platform combining alpha generation, execution optimization, and real-time risk management.',
+                tags: ['Alpha Generation', 'Execution', 'Risk Management'],
+                layout: 'hierarchical',
+                nodes: [
+                    { id: 1, label: 'Trading\nSystem', group: 'central', x: 50, y: 15 },
+                    { id: 2, label: 'Alpha\nModels', group: 'concept', x: 25, y: 40 },
+                    { id: 3, label: 'Execution\nOptimizer', group: 'concept', x: 75, y: 40 },
+                    { id: 4, label: 'Risk\nManager', group: 'concept', x: 20, y: 65 },
+                    { id: 5, label: 'Market\nImpact', group: 'concept', x: 50, y: 65 },
+                    { id: 6, label: 'Backtesting', group: 'concept', x: 80, y: 65 },
+                    { id: 7, label: 'Pandas', group: 'tool', x: 25, y: 85 },
+                    { id: 8, label: 'KDB+', group: 'tool', x: 75, y: 85 },
+                ],
+                edges: [
+                    { from: 1, to: 2, label: 'predicts' },
+                    { from: 1, to: 3, label: 'executes' },
+                    { from: 4, to: 1, label: 'monitors' },
+                    { from: 3, to: 5, label: 'minimizes' },
+                    { from: 6, to: 2, label: 'validates' },
+                    { from: 7, to: 2, label: 'analyzes' },
+                    { from: 8, to: 1, label: 'stores' },
+                ]
+            },
+            {
+                id: 18,
+                title: 'Autonomous Vehicle Perception',
+                subtitle: 'Computer Vision',
+                description: 'Multi-sensor perception stack for autonomous driving with sensor fusion, object detection, and motion forecasting.',
+                tags: ['Sensor Fusion', 'LiDAR', 'Object Detection', 'Tracking'],
+                layout: 'radial',
+                nodes: [
+                    { id: 1, label: 'AV\nPerception', group: 'central', x: 50, y: 50 },
+                    { id: 2, label: 'Camera\nCNN', group: 'concept', x: 50, y: 20 },
+                    { id: 3, label: 'LiDAR\nProcessing', group: 'concept', x: 78, y: 35 },
+                    { id: 4, label: 'Sensor\nFusion', group: 'concept', x: 78, y: 65 },
+                    { id: 5, label: 'Object\nTracking', group: 'concept', x: 50, y: 80 },
+                    { id: 6, label: 'Motion\nForecasting', group: 'concept', x: 22, y: 65 },
+                    { id: 7, label: 'PointPillars', group: 'tool', x: 22, y: 35 },
+                    { id: 8, label: 'ROS', group: 'tool', x: 85, y: 50 },
+                ],
+                edges: [
+                    { from: 1, to: 2, label: 'sees' },
+                    { from: 1, to: 3, label: 'scans' },
+                    { from: 4, to: 1, label: 'fuses' },
+                    { from: 5, to: 1, label: 'tracks' },
+                    { from: 6, to: 1, label: 'predicts' },
+                    { from: 7, to: 3, label: 'encodes' },
+                    { from: 8, to: 1, label: 'orchestrates' },
+                ]
+            },
+            {
+                id: 19,
+                title: 'Speech Recognition Pipeline',
+                subtitle: 'Deep Learning',
+                description: 'Enterprise speech recognition optimized for conversational telephone speech with domain adaptation.',
+                tags: ['Conformer', 'ASR', 'Speaker Diarization', 'NLP'],
+                layout: 'force',
+                nodes: [
+                    { id: 1, label: 'Speech\nRecognition', group: 'central', x: 50, y: 50 },
+                    { id: 2, label: 'Conformer', group: 'concept', x: 25, y: 30 },
+                    { id: 3, label: 'Language\nModel', group: 'concept', x: 75, y: 30 },
+                    { id: 4, label: 'Speaker\nDiarization', group: 'concept', x: 25, y: 70 },
+                    { id: 5, label: 'WFST\nDecoder', group: 'concept', x: 75, y: 70 },
+                    { id: 6, label: 'Domain\nAdaptation', group: 'concept', x: 50, y: 20 },
+                    { id: 7, label: 'Kaldi', group: 'tool', x: 15, y: 85 },
+                    { id: 8, label: 'Wav2Vec', group: 'tool', x: 85, y: 85 },
+                ],
+                edges: [
+                    { from: 1, to: 2, label: 'encodes' },
+                    { from: 1, to: 3, label: 'contextualizes' },
+                    { from: 4, to: 1, label: 'segments' },
+                    { from: 5, to: 1, label: 'decodes' },
+                    { from: 6, to: 1, label: 'customizes' },
+                    { from: 7, to: 2, label: 'extracts' },
+                    { from: 8, to: 2, label: 'pretrains' },
+                ]
+            },
+            {
+                id: 20,
+                title: 'Cybersecurity Threat Detection',
+                subtitle: 'Cybersecurity',
+                description: 'AI-powered security operations platform detecting advanced threats through network, endpoint, and user behavior analytics.',
+                tags: ['Threat Detection', 'UEBA', 'Network Analytics', 'SIEM'],
+                layout: 'bipartite',
+                nodes: [
+                    { id: 1, label: 'Threat\nDetection', group: 'central', x: 50, y: 50 },
+                    { id: 2, label: 'Network\nAnalytics', group: 'concept', x: 25, y: 30 },
+                    { id: 3, label: 'UEBA', group: 'concept', x: 75, y: 30 },
+                    { id: 4, label: 'Endpoint\nDetection', group: 'concept', x: 25, y: 70 },
+                    { id: 5, label: 'Threat\nIntelligence', group: 'concept', x: 75, y: 70 },
+                    { id: 6, label: 'SOAR', group: 'concept', x: 50, y: 20 },
+                    { id: 7, label: 'Zeek', group: 'tool', x: 15, y: 85 },
+                    { id: 8, label: 'Splunk', group: 'tool', x: 85, y: 85 },
+                ],
+                edges: [
+                    { from: 1, to: 2, label: 'monitors' },
+                    { from: 1, to: 3, label: 'profiles' },
+                    { from: 4, to: 1, label: 'sensors' },
+                    { from: 5, to: 1, label: 'enriches' },
+                    { from: 6, to: 1, label: 'responds' },
+                    { from: 7, to: 2, label: 'captures' },
+                    { from: 8, to: 1, label: 'correlates' },
+                ]
+            }
+        ];
+
+        // Starfield Animation
+        function initStarfield(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let stars = [];
+            const numStars = 200;
+
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+
+            function createStars() {
+                stars = [];
+                for (let i = 0; i < numStars; i++) {
+                    stars.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        size: Math.random() * 1.5 + 0.5,
+                        speed: Math.random() * 0.3 + 0.1,
+                        opacity: Math.random() * 0.5 + 0.3
+                    });
+                }
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+
+                stars.forEach(star => {
+                    ctx.beginPath();
+                    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(46, 233, 246, ${star.opacity})`;
+                    ctx.fill();
+
+                    star.y += star.speed;
+                    if (star.y > height) {
+                        star.y = 0;
+                        star.x = Math.random() * width;
+                    }
+                });
+
+                requestAnimationFrame(animate);
+            }
+
+            resize();
+            createStars();
+            animate();
+
+            window.addEventListener('resize', () => {
+                resize();
+                createStars();
+            });
+        }
+
+        // Network Graph Rendering
+        function renderNetworkGraph(container, graphData) {
+            if (!container) return;
+
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('width', '100%');
+            svg.setAttribute('height', '100%');
+            svg.setAttribute('viewBox', '0 0 100 100');
+            svg.style.overflow = 'visible';
+
+            const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+            const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+            gradient.setAttribute('id', 'edgeGradient');
+            gradient.innerHTML = `
+                <stop offset="0%" style="stop-color:#2EE9F6;stop-opacity:0.8" />
+                <stop offset="100%" style="stop-color:#2EE9F6;stop-opacity:0.2" />
+            `;
+            defs.appendChild(gradient);
+            svg.appendChild(defs);
+
+            // Render edges
+            graphData.edges.forEach(edge => {
+                const fromNode = graphData.nodes.find(n => n.id === edge.from);
+                const toNode = graphData.nodes.find(n => n.id === edge.to);
+                if (!fromNode || !toNode) return;
+
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', fromNode.x);
+                line.setAttribute('y1', fromNode.y);
+                line.setAttribute('x2', toNode.x);
+                line.setAttribute('y2', toNode.y);
+                line.setAttribute('stroke', 'url(#edgeGradient)');
+                line.setAttribute('stroke-width', '0.3');
+                svg.appendChild(line);
+
+                // Edge label
+                const midX = (fromNode.x + toNode.x) / 2;
+                const midY = (fromNode.y + toNode.y) / 2;
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', midX);
+                text.setAttribute('y', midY);
+                text.setAttribute('text-anchor', 'middle');
+                text.setAttribute('fill', '#A9B3C8');
+                text.setAttribute('font-size', '2.5');
+                text.setAttribute('font-family', 'IBM Plex Mono');
+                text.textContent = edge.label;
+                svg.appendChild(text);
+            });
+
+            // Render nodes
+            graphData.nodes.forEach(node => {
+                const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', node.x);
+                circle.setAttribute('cy', node.y);
+                circle.setAttribute('r', node.group === 'central' ? 6 : 4);
+                circle.setAttribute('fill', node.group === 'central' ? '#2EE9F6' : 'rgba(15, 23, 42, 0.9)');
+                circle.setAttribute('stroke', '#2EE9F6');
+                circle.setAttribute('stroke-width', '0.5');
+                group.appendChild(circle);
+
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', node.x);
+                text.setAttribute('y', node.y);
+                text.setAttribute('text-anchor', 'middle');
+                text.setAttribute('dominant-baseline', 'middle');
+                text.setAttribute('fill', node.group === 'central' ? '#070B14' : '#F4F7FF');
+                text.setAttribute('font-size', node.group === 'central' ? '2.8' : '2.2');
+                text.setAttribute('font-family', 'IBM Plex Mono');
+                text.setAttribute('font-weight', '500');
+                text.style.whiteSpace = 'pre';
+                text.textContent = node.label;
+                group.appendChild(text);
+
+                svg.appendChild(group);
+            });
+
+            container.appendChild(svg);
+        }
+
+        // Render Projects
+        function renderProjects() {
+            const container = document.getElementById('projects-container');
+            if (!container) return;
+
+            projects.forEach((project, index) => {
+                const section = document.createElement('section');
+                section.className = 'project';
+                section.id = `project-${project.id}`;
+
+                const isEven = index % 2 === 0;
+
+                section.innerHTML = `
+                    <div class="project-container">
+                        <div class="project-grid" style="direction: ${isEven ? 'ltr' : 'rtl'}">
+                            <div class="project-graph slide-in-left" style="direction: ltr">
+                                <div class="glass-panel project-graph-container">
+                                    <div class="project-graph-header">
+                                        <span class="hud-label">PROJECT ${String(project.id).padStart(2, '0')}</span>
+                                    </div>
+                                    <div class="project-graph-layout">${project.layout} layout</div>
+                                    <div class="project-graph-svg" id="graph-${project.id}"></div>
+                                </div>
+                            </div>
+                            <div class="project-info fade-in" style="direction: ltr">
+                                <div class="project-subtitle hud-label">${project.subtitle}</div>
+                                <h2 class="project-title">${project.title}</h2>
+                                <p class="project-description">${project.description}</p>
+                                <div class="project-tags">
+                                    ${project.tags.map(tag => `<span class="tag-pill">${tag}</span>`).join('')}
+                                </div>
+                                <button class="glass-button" onclick="openCaseModal(${project.id})">
+                                    View case study
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                        <polyline points="15 3 21 3 21 9"></polyline>
+                                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(section);
+
+                // Render network graph
+                const graphContainer = document.getElementById(`graph-${project.id}`);
+                renderNetworkGraph(graphContainer, { nodes: project.nodes, edges: project.edges });
+            });
+        }
+
+        // Modal Functions
+        function openCaseModal(projectId) {
+            const modal = document.getElementById('caseModal');
+            const caseStudy = caseStudies[projectId];
+            if (!caseStudy || !modal) return;
+
+            // Set header content
+            document.getElementById('modalSubtitle').textContent = caseStudy.subtitle;
+            document.getElementById('modalTitle').textContent = caseStudy.title;
+
+            // Build modal body content
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = `
+                <div class="case-section">
+                    <h3 class="case-section-title">Executive Summary</h3>
+                    <div class="case-section-content">
+                        ${caseStudy.executiveSummary.split('\n\n').map(p => `<p>${p}</p>`).join('')}
+                    </div>
+                </div>
+
+                <div class="case-section">
+                    <h3 class="case-section-title">Business Problem</h3>
+                    <div class="case-section-content">
+                        ${caseStudy.businessProblem.split('\n\n').map(p => `<p>${p}</p>`).join('')}
+                    </div>
+                </div>
+
+                <div class="case-section">
+                    <h3 class="case-section-title">Technical Architecture</h3>
+                    <div class="case-section-content">
+                        ${caseStudy.technicalArchitecture.split('\n\n').map(p => `<p>${p}</p>`).join('')}
+                    </div>
+                </div>
+
+                <div class="case-section">
+                    <h3 class="case-section-title">Data Strategy</h3>
+                    <div class="case-section-content">
+                        ${caseStudy.dataStrategy.split('\n\n').map(p => `<p>${p}</p>`).join('')}
+                    </div>
+                </div>
+
+                <div class="case-section">
+                    <h3 class="case-section-title">Model Performance</h3>
+                    <div class="case-section-content">
+                        ${caseStudy.modelPerformance.split('\n\n').map(p => `<p>${p}</p>`).join('')}
+                    </div>
+                </div>
+
+                <div class="case-section">
+                    <h3 class="case-section-title">Implementation Strategy</h3>
+                    <div class="case-section-content">
+                        ${caseStudy.implementationStrategy.split('\n\n').map(p => `<p>${p}</p>`).join('')}
+                    </div>
+                </div>
+
+                <div class="case-section">
+                    <h3 class="case-section-title">Business Impact</h3>
+                    <div class="case-section-content">
+                        ${caseStudy.businessImpact.split('\n\n').map(p => `<p>${p}</p>`).join('')}
+                    </div>
+                </div>
+
+                <div class="case-section">
+                    <h3 class="case-section-title">Lessons Learned</h3>
+                    <div class="case-section-content">
+                        ${caseStudy.lessonsLearned.split('\n\n').map(p => `<p>${p}</p>`).join('')}
+                    </div>
+                </div>
+            `;
+
+            // Show modal
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCaseModal() {
+            const modal = document.getElementById('caseModal');
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Close modal on outside click
+        document.addEventListener('click', (e) => {
+            const modal = document.getElementById('caseModal');
+            if (e.target === modal) {
+                closeCaseModal();
+            }
+        });
+
+        // Close modal on ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeCaseModal();
+            }
+        });
+
+        // Scroll to projects
+        function scrollToProjects() {
+            document.getElementById('project-1').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Intersection Observer for animations
+        function initScrollAnimations() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            document.querySelectorAll('.fade-in, .slide-in-left').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Update active nav dot on scroll
+        function initNavTracking() {
+            const projectSections = document.querySelectorAll('.project');
+            const navDots = document.querySelectorAll('.nav-dot');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const index = Array.from(projectSections).indexOf(entry.target);
+                        navDots.forEach((dot, i) => {
+                            dot.classList.toggle('active', i === index);
+                        });
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            projectSections.forEach(section => observer.observe(section));
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initStarfield('starfield');
+            renderProjects();
+            initScrollAnimations();
+            initNavTracking();
+        });
+    </script>
+</body>
+</html>
